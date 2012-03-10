@@ -10,7 +10,14 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        // action body
+        
+        if (Zend_Auth::getInstance()->hasIdentity()) {
+            $this->_helper->redirector('index','Stories');
+        }
+        else {
+            $this->_helper->redirector('login','Auth');
+        }
+        
     }
 
 

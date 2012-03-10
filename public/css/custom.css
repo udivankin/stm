@@ -1,0 +1,14 @@
+/* 
+    Document   : custom
+    Created on : Mar 10, 2012, 11:33:12 PM
+    Author     : Alexey Udivankin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+body {
+    padding-top: 60px;
+}
