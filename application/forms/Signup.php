@@ -23,7 +23,15 @@ class Application_Form_Signup extends Zend_Form
 		->addValidator('NotEmpty', true,
 		    array('messages' => array('isEmpty' => $isEmptyMessage))
 		);
-                
+
+        // defining label, validators, filter tags and spaces	
+	$email = $this->createElement('text','email');
+        $email->setLabel('E-mail: *')
+		->setRequired(true)
+		->addFilter('StripTags')
+		->addFilter('StringTrim')
+		->addValidator('EmailAddress');
+	
         // defining label, validators, filter tags and spaces	
         $password = $this->createElement('password','password');
         $password->setLabel('Password: *')
@@ -52,7 +60,7 @@ class Application_Form_Signup extends Zend_Form
                 ->setIgnore(true);
 
 	// adding elements to the form               
-        $this->addElements(array($username,$password,$confirmPassword,$submit));
+        $this->addElements(array($username,$email,$password,$confirmPassword,$submit));
 	
 	// defining form method
         $this->setMethod('post');
