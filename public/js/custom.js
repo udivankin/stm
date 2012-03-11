@@ -6,11 +6,15 @@
 
 $(document).ready(function() { 
 
-    $('.tooltiped').tooltip({placement:'bottom'});
+    $('.tooltiped').tooltip({placement:'left'});
     
     $('.commentbutton').button();
     
-
+    $('.commentbutton').toggle(function() {
+        $(this).parentsUntil('.alert').next().fadeIn(200);        
+    }, function() {
+        $(this).parentsUntil('.alert').next().fadeOut(200);  
+    });
     
     
 });

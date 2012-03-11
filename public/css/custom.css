@@ -36,3 +36,9 @@ body {
 .alert{
     padding: 8px 14px;
 }
+.storyComments{
+    display:none;
+}
+.storyComments textarea {
+    width:99%;
+}

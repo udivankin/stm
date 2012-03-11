@@ -27,7 +27,7 @@
         $commentsCount = count($story['comments']);
         $currentStatusTitle = 'Mark as Started';
         
-        echo '<div class="alert alert-info">';
+        echo '<div class="alert alert-info" id="story'.$story['content']['id'].'">';
         echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>#'.$story['content']['id'].'</strong> '.$story['content']['title'].'</h4></div>';
         echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
         
@@ -49,13 +49,17 @@
              <a class="btn commentbutton tooltiped" data-original-title="Show comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
         </div>
        
-    </div> 
+    </div>
+    <div class="storyComments">
     <?php
         foreach ($story['comments'] as $comment) {
             echo '<pre>'.$comment['author'].' wrote: '.$comment['text'].'</pre>';
         }
     
     ?>
+        <textarea class="input-xlarge" id="textarea" rows="2"></textarea>
+        <a class="btn">Add comment</a>
+    </div>
     
     
 
