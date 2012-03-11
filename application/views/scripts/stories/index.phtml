@@ -21,6 +21,8 @@
     <div class="span10">
 <?php
 
+    $this->myCustomTitle = "Stories list";
+
     foreach ($this->stories as $story) {
         
         $subtitle = 'Author: '.$story['content']['author'].' | Officer: '.$story['content']['officer'];

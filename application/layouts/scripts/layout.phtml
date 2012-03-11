@@ -4,8 +4,8 @@
     $this->headTitle()->setSeparator(' - ');
     
     // set title
-    $this->myCustomTitle = 'Simple Task Manager';
-    $this->headTitle($this->myCustomTitle);
+    $this->headTitle($this->myCustomTitle)
+                    ->prepend('Simple Task Manager');   
  
     // set styles    
     $this->headLink()->appendStylesheet('/css/custom.css')
@@ -55,10 +55,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#"><?php echo $this->myCustomTitle; ?></a>
+          <a class="brand" href="#">Simple Task Manager</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="/">Home</a></li>
+              <li class="active"><a href="/"><?php echo $this->myCustomTitle; ?></a></li>
               <!--<li><a href="#about">About</a></li>
               <li><a href="#contact">Contact</a></li>-->
             </ul>
@@ -83,7 +83,6 @@ if ($this->userInfo) {
     
     
      <div class="container">
-        <h3><?php echo $this->escape($this->title); ?></h3>
 <?php
             // echo view
             echo $this->layout()->content;
