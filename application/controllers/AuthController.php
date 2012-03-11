@@ -124,7 +124,7 @@ class AuthController extends Zend_Controller_Action
 		$data['password'] = md5($data['password'].$salt);
 		// unset confirm password
                 unset($data['confirmPassword']);
-		// insert data to database TODO: delete role column from users table
+		// insert data to database
                 $users->insert($data);
                 $this->_redirect('auth/login');
             }

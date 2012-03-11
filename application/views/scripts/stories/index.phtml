@@ -1,4 +1,8 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Stories</b> and script/action name <b>index</b></p>
-</div>
+<?php
+
+    foreach ($this->stories as $story) {
+	echo 'id:'.$story['id'].' title:'.$story['title'];
+	
+    }
+
+?>
