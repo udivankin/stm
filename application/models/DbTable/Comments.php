@@ -7,6 +7,11 @@ class Application_Model_DbTable_Comments extends Zend_Db_Table_Abstract
 
     // CRUD methods
     
+    public function getCommentsByID($storyID) {
+        $result = $this->fetchAll('storyID = '.$storyID);
+        return $result;
+    }
+    
     public function addComment($storyID,$author,$text)
     {
         $data = array(

@@ -1,8 +1,67 @@
+<div class="row">
+    
+    <div class="span2 well" style="padding: 8px 0;">
+        <ul class="nav nav-list">
+        <li class="nav-header">
+            Filter by officer:
+        </li>
+        <li class="active"><a href="#">allx</a></li>
+        <li><a href="#">user</a></li>
+        <li class="nav-header">
+            Filter by status:
+        </li>
+        <li><a href="#">1. New</a></li>
+        <li><a href="#">2. Started</a></li>
+        <li><a href="#">3. Finished</a></li>
+        <li><a href="#">4. Accepter</a></li>
+        <li><a href="#">5. Rejected</a></li>
+        </ul>
+    </div>
+    
+    <div class="span10">
 <?php
 
     foreach ($this->stories as $story) {
-	echo 'id:'.$story['id'].' title:'.$story['title'];
-	
+        
+        $subtitle = 'Author: '.$story['content']['author'].' | Officer: '.$story['content']['officer'];
+        $commentsCount = count($story['comments']);
+        $currentStatusTitle = 'Mark as Started';
+        
+        echo '<div class="alert alert-info">';
+        echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>#'.$story['content']['id'].'</strong> '.$story['content']['title'].'</h4></div>';
+        echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
+        
+        ?>
+
+        <div class="storyBlockRight">
+            <div class="btn-group">
+                <a class="btn" href="#"><?php echo $currentStatusTitle; ?></a>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Mark as Finished</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#"><i class="icon-ok"></i> Accept</a></li>
+                    <li><a href="#"><i class="icon-remove"></i></i> Reject</a></li>
+                </ul>
+            </div>
+             <a class="btn commentbutton tooltiped" data-original-title="Show comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
+        </div>
+       
+    </div> 
+    <?php
+        foreach ($story['comments'] as $comment) {
+            echo '<pre>'.$comment['author'].' wrote: '.$comment['text'].'</pre>';
+        }
+    
+    ?>
+    
+    
+
+</div>
+
+        <?php
     }
 
 ?>

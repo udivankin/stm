@@ -6,5 +6,11 @@
 
 $(document).ready(function() { 
 
+    $('.tooltiped').tooltip({placement:'bottom'});
+    
+    $('.commentbutton').button();
+    
 
+    
+    
 });

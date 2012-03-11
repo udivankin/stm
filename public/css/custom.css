@@ -12,3 +12,27 @@ root {
 body {
     padding-top: 60px;
 }
+
+.storyBlockRight{
+    position:absolute;
+    top:0px;
+    right:0px;
+}
+.storyBlockRight .btn-group{
+    margin-left:10px;    
+    float:right;    
+}
+.storyBlockRight input.btn{
+    margin-left:10px;
+    float:right;
+}
+.storyBlock{
+    margin-bottom: 10px;
+    position: relative;
+}
+.storyBlockTitle{
+    margin-bottom: 10px;
+}
+.alert{
+    padding: 8px 14px;
+}

@@ -5,9 +5,10 @@ class StoriesController extends Zend_Controller_Action
 
     public function init()
     {
-        /* Initialize action controller here */
+        // if authorised initializing necessary models
 	if (Zend_Auth::getInstance()->hasIdentity()) {
             $this->stories = new Application_Model_DbTable_Stories();
+            $this->comments = new Application_Model_DbTable_Comments();            
 	    $this->view->userInfo = Zend_Auth::getInstance()->getStorage()->read();
         }
         else {
@@ -17,10 +18,14 @@ class StoriesController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        // action body
-	
+	// fetch all stories into an one big array
+        // this client-side oriented approach is definately not for production :)
 	$result = $this->stories->fetchAll();
-	$this->view->stories = $result;
+        foreach ($result as $res) {
+            $storycomments = $this->comments->getCommentsByID($res['id']);
+            $str[]=array('content'=>$res,'comments'=>$storycomments);
+        }
+        $this->view->stories = $str;
 	
     }
 
