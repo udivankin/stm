@@ -10,7 +10,7 @@ class Application_Model_DbTable_Comments extends Zend_Db_Table_Abstract
     public function addComment($storyID,$author,$text)
     {
         $data = array(
-            'storyID' => $title,
+            'storyID' => $storyID,
             'author' => $author,
             'text' => $text
         );
@@ -20,7 +20,7 @@ class Application_Model_DbTable_Comments extends Zend_Db_Table_Abstract
     public function updateComment($id,$storyID,$author,$text)
     {
         $data = array(
-            'storyID' => $title,
+            'storyID' => $storyID,
             'author' => $author,
             'text' => $text
         );
