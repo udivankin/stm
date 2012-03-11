@@ -111,12 +111,12 @@ class AuthController extends Zend_Controller_Action
                 $data = $form->getValues();
 		// check if passwords match
                 if($data['password'] != $data['confirmPassword']){
-                    $this->view->errorMessage = "Password and confirm password don't match.";
+                    $this->view->errMessage = "Password and confirm password don't match.";
                     return;
                 }
 		// check if already exists
                 if($users->checkUnique($data['username'])){
-                    $this->view->errorMessage = "Name already taken. Please choose another one.";
+                    $this->view->errMessage = "Name already taken. Please choose another one.";
                     return;
                 }
 		$salt = Zend_Registry::get('hashsalt');
