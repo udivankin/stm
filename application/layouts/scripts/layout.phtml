@@ -69,7 +69,7 @@
 if ($this->userInfo) {
    echo '<p class="navbar-text pull-right">Hello, '.$this->userInfo->username.'. <a href="'.$this->url(array('controller'=>'auth', 'action'=>'logout')).'">Log out</a></p>';
 } else {
-   echo '<p class="navbar-text pull-right"><a href="'.$this->url(array('controller'=>'auth', 'action'=>'login')).'">Sign in</a></p>';
+   echo '<p class="navbar-text pull-right"><a href="'.$this->url(array('controller'=>'auth', 'action'=>'login')).'">Sign in</a> or <a href="'.$this->url(array('controller'=>'auth', 'action'=>'signup')).'">Sign up for Free!</a></p>';
 }
 
 ?>
@@ -82,7 +82,7 @@ if ($this->userInfo) {
     
     
      <div class="container">
-        <h2><?php echo $this->escape($this->title); ?></h2>
+        <h3><?php echo $this->escape($this->title); ?></h3>
 <?php
             // echo view
             echo $this->layout()->content;

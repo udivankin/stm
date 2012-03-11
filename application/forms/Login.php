@@ -26,10 +26,7 @@ class Application_Form_Login extends Zend_Form
                 array('messages' => array('isEmpty' => $isEmptyMessage,))
             );
         
-        // adding 
-        $username->addValidator('regex', false, array('/^[a-z0-9]/i'));
-        
-        // instantiating an element and passing to the form object 
+       // instantiating an element and passing to the form object 
         $password = new Zend_Form_Element_Password('password');
         
         // defining label, validators, filter tags and spaces
@@ -43,10 +40,15 @@ class Application_Form_Login extends Zend_Form
             );
         
         // creating submit button
-        $submit = new Zend_Form_Element_Submit('login');
+        $submit = new Zend_Form_Element_Submit(array( 
+        'name' => 'login', 
+        'content' => 'Login', 
+        'class' => 'btn-primary' 
+	));
         $submit->setLabel('Submit');
-        
+	
         // adding elements to the form
+	
         $this->addElements(array($username, $password, $submit));
         
         // defining form method

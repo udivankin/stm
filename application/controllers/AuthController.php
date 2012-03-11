@@ -17,7 +17,6 @@ class AuthController extends Zend_Controller_Action
     public function loginAction()
     {
         // action login
-
         if (Zend_Auth::getInstance()->hasIdentity()) {
             // redirect to homepeage if logged in 
             $this->_helper->redirector('index', 'Stories');
@@ -40,18 +39,21 @@ class AuthController extends Zend_Controller_Action
                 // defining new Zend_Auth_Adapter_DbTable
                 $authAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
 
-                // set fields to proceed auth
+                // getting post variables
+                $username = $this->getRequest()->getPost('username');
+                $password = $this->getRequest()->getPost('password');
+		
+		// set fields to proceed auth
                 $authAdapter->setTableName('users')
                             ->setIdentityColumn('username')
                             ->setCredentialColumn('password');
 
-                // getting post variables
-                $username = $this->getRequest()->getPost('username');
-                $password = $this->getRequest()->getPost('password');
 
-                // and passing to auth adapter
+		$salt = Zend_Registry::get('hashsalt');
+
+                // set auth type		
                 $authAdapter->setIdentity($username)
-                    ->setCredential($password);
+                    ->setCredential(md5($password.$salt));
 
                 // getting new Zend_Auth instance
                 $auth = Zend_Auth::getInstance();
@@ -80,9 +82,8 @@ class AuthController extends Zend_Controller_Action
                     
                 }
             }
-        }
+	}
     }
-
 
     public function logoutAction()
     {
@@ -93,9 +94,50 @@ class AuthController extends Zend_Controller_Action
         $this->_helper->redirector('login', 'Auth');
     }
 
+    public function signupAction()
+    {
+        // action body
+	// TODO : check if signed in
+	
+        $form = new Application_Form_Signup();
+        $this->view->form=$form;
+	
+	// getting a model instance
+	$users = new Application_Model_DbTable_Users();
+	
+	// if form is submitted
+        if($this->getRequest()->isPost()){
+            if($form->isValid($_POST)){
+                $data = $form->getValues();
+		// check if passwords match
+                if($data['password'] != $data['confirmPassword']){
+                    $this->view->errorMessage = "Password and confirm password don't match.";
+                    return;
+                }
+		// check if already exists
+                if($users->checkUnique($data['username'])){
+                    $this->view->errorMessage = "Name already taken. Please choose another one.";
+                    return;
+                }
+		$salt = Zend_Registry::get('hashsalt');
+		// replace password taken from form by salted hash
+		$data['password'] = md5($data['password'].$salt);
+		// unset confirm password
+                unset($data['confirmPassword']);
+		// insert data to database TODO: delete role column from users table
+                $users->insert($data);
+                $this->_redirect('auth/login');
+            }
+        }
+	
+	
+    }
+    
 
 
 }
+
+
 
 
 
