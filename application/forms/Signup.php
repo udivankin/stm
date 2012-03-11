@@ -15,7 +15,7 @@ class Application_Form_Signup extends Zend_Form
 
         // defining label, validators, filter tags and spaces	
 	$username = $this->createElement('text','username');
-        $username->setLabel('Username: *')
+        $username->setLabel('Login: *')
 		->setRequired(true)
 		->addFilter('StripTags')
 		->addFilter('StringTrim')

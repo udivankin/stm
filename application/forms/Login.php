@@ -17,11 +17,12 @@ class Application_Form_Login extends Zend_Form
         $username = new Zend_Form_Element_Text('username');
         
         // defining label, validators, filter tags and spaces
-        $username->setLabel('Login:')
+        $username->setLabel('Login or email:')
             ->setRequired(true)
             ->addFilter('StripTags')
             ->addFilter('StringTrim')
-            ->addValidator('alnum')
+            ->addFilter('StringToLower')
+            ->addValidator('regex', false, array('/^[a-z0-9\@\_\-\.]/'))
             ->addValidator('NotEmpty', true,
                 array('messages' => array('isEmpty' => $isEmptyMessage,))
             );
@@ -41,9 +42,9 @@ class Application_Form_Login extends Zend_Form
         
         // creating submit button
         $submit = new Zend_Form_Element_Submit(array( 
-        'name' => 'login', 
-        'content' => 'Login', 
-        'class' => 'btn-primary' 
+            'name' => 'login', 
+            'content' => 'Login', 
+            'class' => 'btn-primary' 
 	));
         $submit->setLabel('Submit');
 	

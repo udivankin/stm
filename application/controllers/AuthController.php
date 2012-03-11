@@ -22,8 +22,8 @@ class AuthController extends Zend_Controller_Action
             $this->_helper->redirector('index', 'Stories');
         }
 
-        // pass login form to view
         $form = new Application_Form_Login();
+        
         $this->view->form = $form;
 
         // if form is submitted via post request
@@ -39,15 +39,22 @@ class AuthController extends Zend_Controller_Action
                 // defining new Zend_Auth_Adapter_DbTable
                 $authAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
 
+                
                 // getting post variables
                 $username = $this->getRequest()->getPost('username');
                 $password = $this->getRequest()->getPost('password');
-		
+
+                // transform email to username if necessary
+                $usersmodel = new Application_Model_DbTable_Users();
+                $nameEmailValidator = new Zend_Validate_EmailAddress();
+                if ($nameEmailValidator->isValid($username)) {
+                    $username = $usersmodel->getUserNameByEmail($username);
+                }
+                
 		// set fields to proceed auth
                 $authAdapter->setTableName('users')
                             ->setIdentityColumn('username')
                             ->setCredentialColumn('password');
-
 
 		$salt = Zend_Registry::get('hashsalt');
 
@@ -78,7 +85,7 @@ class AuthController extends Zend_Controller_Action
                     
                 } else {
                     
-                    $this->view->errMessage = 'Wrong user name or password';
+                    $this->view->errMessage = 'Wrong login/email or password';
                     
                 }
             }
@@ -115,7 +122,7 @@ class AuthController extends Zend_Controller_Action
                     return;
                 }
 		// check if already exists
-                if($users->checkUnique($data['username'])){
+                if($users->checkUnique($data['username'],$data['email'])){
                     $this->view->errMessage = "Name already taken. Please choose another one.";
                     return;
                 }
