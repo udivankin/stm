@@ -12,9 +12,7 @@ class StoriesController extends Zend_Controller_Action
 	    $this->view->userInfo = Zend_Auth::getInstance()->getStorage()->read();
 	    $this->userInfo = Zend_Auth::getInstance()->getStorage()->read();
         }
-        else {
-            $this->_helper->redirector('login','Auth');
-	}
+        else $this->_helper->redirector('login','Auth');
     }
 
     public function indexAction()
@@ -55,11 +53,50 @@ class StoriesController extends Zend_Controller_Action
 		$res['result']=0;
 	    }
 	    $this->view->output = $res;
+	} 
+	
+    }
+
+    public function deleteCommentAction()
+    {
+        // action body
+	if ($this->getRequest()->isPost()) {
+	    $result = 0;
+	    $intValidator = new Zend_Validate_Digits();
+	    if ($intValidator->isValid($this->_getParam('commentID'))) {
+		$this->comments->deleteComment($this->_getParam('commentID'));
+		$result = 1;
+	    }
+	    $this->view->output = array('result'=>$result);	    
 	}
+    }
+
+    public function addStoryAction()
+    {
+        // action body
+    }
+
+    public function deleteStoryAction()
+    {
+        // action body
+    }
+
+    public function updateStoryAction()
+    {
+        // action body
+    }
+
+    public function updateStoryStatusAction()
+    {
+        // action body
     }
 
 
 }
+
+
+
+
 
 
 

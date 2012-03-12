@@ -16,7 +16,7 @@ $(document).ready(function() {
     });
     
     /* filter stories by status id */
-    $(".filterByStatus").click(function() {
+    $("#storyFilters .filterByStatus").click(function() {
 	var statusID = $(this).attr('filterstatus');
 	$('.story').hide();
 	$('.story[storyStatus="'+statusID+'"]').fadeIn(200);
@@ -25,7 +25,7 @@ $(document).ready(function() {
     });
     
     /* filter stories by officer */
-    $(".filterByOfficer").click(function() {
+    $("#storyFilters .filterByOfficer").click(function() {
 	var uName = $(this).attr('storyofficer');
 	$('.story').hide();
 	$('.story[storyofficer="'+uName+'"]').fadeIn(200);
@@ -34,6 +34,7 @@ $(document).ready(function() {
     });
  
     $(".resetFilters").click(function() {
+	$('#storyFilters li').removeClass('active');
 	$('.story').fadeIn(200);
     }); 
     
@@ -46,9 +47,31 @@ $(document).ready(function() {
     /* delete comment ajax */    
     $(".removeComment").click(function() {
 	 $('#deleteCommentModal').modal('show');
-	 var cID = $(this).attr('commentID');
     });
 
+    $("#btnConfirmDeleteComment").click(function() {
+	 var cID = $(this).attr('commentID');
+	 var request = $.ajax({
+	    url: "/stories/delete-comment",
+	    type: "POST",
+	    data: {commentID: cID},
+	    dataType: "html"
+	 });
+	 request.done(function(data) {
+	    var resp = eval('(' + data + ')');
+	    if (resp.result==1) {
+		$("#cmt"+cID).hide();
+	    } else {
+		$("#cmt"+cID).after('<div class="alert alert-error">Server message: error deleting comment.</div>');
+	    }
+	    $('div.modal').modal('hide');
+	 });
+	 request.fail(function(jqXHR, textStatus) {
+	    $("#cmt"+cID).after('<div class="alert alert-error">Error while connecting to server.</div>');
+	    $('div.modal').modal('hide');
+	 });	
+    });
+    
     /* delete story ajax */ 
     $(".deleteStory").click(function() {
 	$('#deleteStoryModal').modal('show');
@@ -69,6 +92,7 @@ $(document).ready(function() {
 	    var resp = eval('(' + data + ')');
 	    if (resp.result==1) {
 		$("#commentTextarea"+sID).before('<pre>'+resp.text+'</pre>');
+		$("#commentTextarea"+sID).val('');
 	    } else {
 		$("#commentTextarea"+sID).before('<div class="alert alert-error">Server message: error writing comment.</div>');
 	    }

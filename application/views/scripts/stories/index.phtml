@@ -12,7 +12,7 @@
     <p>Are you sure you want to delete this comment?</p>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary">Yes</a>
+    <a href="#" class="btn btn-primary" id="btnConfirmDeleteComment">Yes</a>
     <a href="#" class="btn btnModalClose">No, thanks</a>
   </div>
 </div>
@@ -26,7 +26,7 @@
     <p>Are you sure you want to delete this story?</p>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary">Yes</a>
+    <a href="#" class="btn btn-primary" id="btnConfirmDeleteStory">Yes</a>
     <a href="#" class="btn btnModalClose">No, thanks</a>
   </div>
 </div>
@@ -35,7 +35,7 @@
     
     
     <div class="span2 well" style="padding: 8px 0;">
-        <ul class="nav nav-list">
+        <ul class="nav nav-list" id="storyFilters">
 	    <li class="nav-header">Filter by officer:</li>
     <?php
         foreach ($this->officers as $officer) {
@@ -97,7 +97,7 @@
     <div class="storyComments">
     <?php
         foreach ($story['comments'] as $comment) {
-            echo '<pre>'.$comment['author'].' wrote: '.$comment['text'].'<i class="icon-remove removeComment" title="Delete Comment" commentID="'.$comment['id'].'"></i></pre>';
+            echo '<pre id="cmt'.$comment['id'].'">'.$comment['author'].' wrote: '.$comment['text'].'<i class="icon-remove removeComment" title="Delete Comment" commentID="'.$comment['id'].'"></i></pre>';
         }
     
     ?>
