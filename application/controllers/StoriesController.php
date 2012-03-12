@@ -8,7 +8,7 @@ class StoriesController extends Zend_Controller_Action
         // if authorised initializing necessary models
 	if (Zend_Auth::getInstance()->hasIdentity()) {
             $this->stories = new Application_Model_DbTable_Stories();
-            $this->comments = new Application_Model_DbTable_Comments();            
+            $this->comments = new Application_Model_DbTable_Comments();
 	    $this->view->userInfo = Zend_Auth::getInstance()->getStorage()->read();
 	    $this->userInfo = Zend_Auth::getInstance()->getStorage()->read();
         }
@@ -27,7 +27,7 @@ class StoriesController extends Zend_Controller_Action
             $str[]=array('content'=>$res,'comments'=>$storycomments);
         }
         $this->view->stories = $str;
-	
+	$this->view->officers = $this->stories->getStoriesOfficerList();
     }
 
     public function addCommentAction()
@@ -48,15 +48,13 @@ class StoriesController extends Zend_Controller_Action
 		$commentText = $this->_getParam('commentText');
 	    }
 	    if ($storyID && $commentText) {
-		$comments = new Application_Model_DbTable_Comments();
-		$comments->addComment($storyID, $this->userInfo->username, $commentText);
+		$this->comments->addComment($storyID, $this->userInfo->username, $commentText);
 		$res['result']=1;
 		$res['text']=$this->userInfo->username.' wrote: '.$commentText;
 	    } else {
 		$res['result']=0;
 	    }
 	    $this->view->output = $res;
-	    
 	}
     }
 

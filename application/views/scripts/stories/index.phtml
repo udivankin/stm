@@ -1,5 +1,6 @@
 <?php 
-    $statuses = array('New','Started','Finished','Accepter','Rejected'); 
+    $statuses = array('New','Started','Finished','Accepted','Rejected');
+    
 ?>
 
 <div class="modal" id="deleteCommentModal">
@@ -32,23 +33,30 @@
 
 <div class="row">
     
+    
     <div class="span2 well" style="padding: 8px 0;">
         <ul class="nav nav-list">
-        <li class="nav-header">
-            Filter by officer:
-        </li>
-        <li class="active"><a href="#">allx</a></li>
-        <li><a href="#">user</a></li>
-        <li class="nav-header">
-            Filter by status:
-        </li>
-        <li><a href="#" class="filterByStatus" filterstatus="0"><?php echo $statuses[0]; ?></a></li>
-        <li><a href="#" class="filterByStatus" filterstatus="1"><?php echo $statuses[1]; ?></a></li>
-        <li><a href="#" class="filterByStatus" filterstatus="2"><?php echo $statuses[2]; ?></a></li>
-        <li><a href="#" class="filterByStatus" filterstatus="3"><?php echo $statuses[3]; ?></a></li>
-        <li><a href="#" class="filterByStatus" filterstatus="4"><?php echo $statuses[4]; ?></a></li>
-        </ul>
+	    <li class="nav-header">Filter by officer:</li>
+    <?php
+        foreach ($this->officers as $officer) {
+	    echo '<li><a class="filterByOfficer" storyofficer="'.$officer['officer'].'" href="javascript: return false;"><i class="icon-user"></i> '.$officer['officer'].'</a></li>';
+	}
+    ?>	
+	    <li class="nav-header">Filter by status:</li>
+	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="0"><i class="icon-tag"></i> <?php echo $statuses[0]; ?></a></li>
+	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="1"><i class="icon-ok-sign"></i> <?php echo $statuses[1]; ?></a></li>
+	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="2"><i class="icon-ok"></i> <?php echo $statuses[2]; ?></a></li>
+	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="3"><i class="icon-lock"></i> <?php echo $statuses[3]; ?></a></li>
+	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="4"><i class="icon-retweet"></i> <?php echo $statuses[4]; ?></a></li>
+	</ul>
+	<ul class="nav nav-list">
+	    <li class="nav-header">Other options:</li>
+	    <li><a href="javascript: return false;" class="resetFilters">Reset All Filters</a></li>
+	    <li><a href="javascript: return false;" class="refreshStories">Refresh Stories List</a></li>	    
+	</ul>	
     </div>
+    
+    
     
     <div class="span10">
 <?php
@@ -69,17 +77,17 @@
 
         <div class="storyBlockRight">
             <div class="btn-group">
-                <a class="btn" href="#"><?php echo $currentStatusTitle; ?></a>
+                <a class="btn" href="javascript: return false;"><?php echo $currentStatusTitle; ?></a>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Mark as Finished</a></li>
+                    <li><a href="javascript: return false;">Mark as Finished</a></li>
                     <li class="divider"></li>
-                    <li><a href="#"><i class="icon-ok"></i> Accept</a></li>
-                    <li><a href="#"><i class="icon-retweet"></i> Reject</a></li>
+                    <li><a href="javascript: return false;"><i class="icon-lock"></i> Accept</a></li>
+                    <li><a href="javascript: return false;"><i class="icon-retweet"></i> Reject</a></li>
 		    <li class="divider"></li>
-		    <li><a href="#" class="deleteStory" storyID="<?php echo $story['content']['id']; ?>"><i class="icon-remove"></i> Delete Story</a></li>
+		    <li><a href="javascript: return false;" class="deleteStory" storyID="<?php echo $story['content']['id']; ?>"><i class="icon-remove"></i> Delete Story</a></li>
                 </ul>
             </div>
              <a class="btn commentbutton tooltiped" data-original-title="Toggle comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
@@ -105,3 +113,5 @@
     }
 
 ?>
+
+<a class="btn btn-primary" id="storyAdd" href="javascript: return false;">Add new story</a>

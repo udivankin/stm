@@ -37,6 +37,12 @@ class Application_Model_DbTable_Stories extends Zend_Db_Table_Abstract
     {
         $this->delete('id = '.$id);
     }
+
+    public function getStoriesOfficerList()
+    {
+        $result = $this->fetchAll($this->select()->from($this, array('officer'))->group('officer'));
+	return $result;
+    }
     
 }
 
