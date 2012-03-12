@@ -14,11 +14,11 @@
         <li class="nav-header">
             Filter by status:
         </li>
-        <li><a href="#"><?php echo $statuses[0]; ?></a></li>
-        <li><a href="#"><?php echo $statuses[1]; ?></a></li>
-        <li><a href="#"><?php echo $statuses[2]; ?></a></li>
-        <li><a href="#"><?php echo $statuses[3]; ?></a></li>
-        <li><a href="#"><?php echo $statuses[4]; ?></a></li>
+        <li><a href="#" class="filterByStatus" filterstatus="0"><?php echo $statuses[0]; ?></a></li>
+        <li><a href="#" class="filterByStatus" filterstatus="1"><?php echo $statuses[1]; ?></a></li>
+        <li><a href="#" class="filterByStatus" filterstatus="2"><?php echo $statuses[2]; ?></a></li>
+        <li><a href="#" class="filterByStatus" filterstatus="3"><?php echo $statuses[3]; ?></a></li>
+        <li><a href="#" class="filterByStatus" filterstatus="4"><?php echo $statuses[4]; ?></a></li>
         </ul>
     </div>
     
@@ -33,7 +33,7 @@
         $commentsCount = count($story['comments']);
         $currentStatusTitle = 'Mark as Started';
         
-        echo '<div class="alert alert-info" storyStatus="'.$story['content']['status'].'" storyOfficer="'.$story['content']['officer'].'" storyID="'.$story['content']['id'].'">';
+        echo '<div class="alert alert-info story" storyStatus="'.$story['content']['status'].'" storyOfficer="'.$story['content']['officer'].'" storyID="'.$story['content']['id'].'">';
         echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].'] #'.$story['content']['id'].'</strong> '.$story['content']['title'].'</h4></div>';
         echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
         

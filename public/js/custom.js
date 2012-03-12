@@ -14,6 +14,12 @@ $(document).ready(function() {
         $(this).parentsUntil('.alert').next().fadeOut(200);
     });
     
+    $(".filterByStatus").click(function() {
+	var statusID = $(this).attr('filterstatus');
+	$('.story').hide();
+	$('.story[storyStatus="'+statusID+'"]').fadeIn(200);
+    });
+    
     $(".addCommentBtn").click(function() {
 	var sID = $(this).attr('storyID');
 	var cText = $("#commentTextarea"+sID).val();
