@@ -46,12 +46,25 @@ body {
     position: relative;
     padding-right: 22px;
 }
-.removeComment{
-    position:absolute;
-    top:4px;
-    right:4px;
-    cursor: pointer;
-}
+
 .modal {
     display: none;
+}
+.removeComment{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    line-height: 18px;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 18px;
+    color: black;
+    text-shadow: 0 1px 0 white;
+    opacity: 0.2;
+    filter: alpha(opacity=20);
+}
+a.removeComment:hover{
+    text-decoration: none;
+    filter: alpha(opacity=0);    
 }

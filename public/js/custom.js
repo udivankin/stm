@@ -47,6 +47,8 @@ $(document).ready(function() {
     /* delete comment ajax */    
     $(".removeComment").click(function() {
 	 $('#deleteCommentModal').modal('show');
+         var cID = $(this).attr('commentID');
+         $('#btnConfirmDeleteComment').attr('commentID',cID);
     });
 
     $("#btnConfirmDeleteComment").click(function() {
@@ -62,6 +64,7 @@ $(document).ready(function() {
 	    if (resp.result==1) {
 		$("#cmt"+cID).hide();
 	    } else {
+                alert('xxx');
 		$("#cmt"+cID).after('<div class="alert alert-error">Server message: error deleting comment.</div>');
 	    }
 	    $('div.modal').modal('hide');
@@ -69,7 +72,7 @@ $(document).ready(function() {
 	 request.fail(function(jqXHR, textStatus) {
 	    $("#cmt"+cID).after('<div class="alert alert-error">Error while connecting to server.</div>');
 	    $('div.modal').modal('hide');
-	 });	
+	 });
     });
     
     /* delete story ajax */ 

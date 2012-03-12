@@ -24,7 +24,7 @@ class StoriesController extends Zend_Controller_Action
             $storycomments = $this->comments->getCommentsByID($res['id']);
             $str[]=array('content'=>$res,'comments'=>$storycomments);
         }
-        $this->view->stories = $str;
+        if (isset($str)) $this->view->stories = $str;
 	$this->view->officers = $this->stories->getStoriesOfficerList();
     }
 

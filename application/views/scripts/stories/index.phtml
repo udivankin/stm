@@ -1,4 +1,5 @@
 <?php 
+
     $statuses = array('New','Started','Finished','Accepted','Rejected');
     
 ?>
@@ -37,11 +38,15 @@
     <div class="span2 well" style="padding: 8px 0;">
         <ul class="nav nav-list" id="storyFilters">
 	    <li class="nav-header">Filter by officer:</li>
-    <?php
+                
+<?php
+    
         foreach ($this->officers as $officer) {
 	    echo '<li><a class="filterByOfficer" storyofficer="'.$officer['officer'].'" href="javascript: return false;"><i class="icon-user"></i> '.$officer['officer'].'</a></li>';
 	}
-    ?>	
+        
+?>
+            
 	    <li class="nav-header">Filter by status:</li>
 	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="0"><i class="icon-tag"></i> <?php echo $statuses[0]; ?></a></li>
 	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="1"><i class="icon-ok-sign"></i> <?php echo $statuses[1]; ?></a></li>
@@ -49,69 +54,91 @@
 	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="3"><i class="icon-lock"></i> <?php echo $statuses[3]; ?></a></li>
 	    <li><a href="javascript: return false;" class="filterByStatus" filterstatus="4"><i class="icon-retweet"></i> <?php echo $statuses[4]; ?></a></li>
 	</ul>
-	<ul class="nav nav-list">
+	<ul class="nav nav-list" style="padding-top:8px">
 	    <li class="nav-header">Other options:</li>
-	    <li><a href="javascript: return false;" class="resetFilters">Reset All Filters</a></li>
-	    <li><a href="javascript: return false;" class="refreshStories">Refresh Stories List</a></li>	    
+	    <li><a href="javascript: return false;" class="resetFilters">&rarr; reset all filters</a></li>
+	    <li><a href="javascript: return false;" class="refreshStories">&rarr; refresh stories list</a></li>	    
 	</ul>	
     </div>
     
-    
-    
     <div class="span10">
+        
 <?php
 
     $this->myCustomTitle = "Stories list";
 
-    foreach ($this->stories as $story) {
+    if (!$this->stories) { 
         
-        $subtitle = 'Author: '.$story['content']['author'].' | Officer: '.$story['content']['officer'];
-        $commentsCount = count($story['comments']);
-        $currentStatusTitle = 'Mark as Started';
+    // greeting message to those who didn`t created any stories yet
         
-        echo '<div class="alert alert-info story" storyStatus="'.$story['content']['status'].'" storyOfficer="'.$story['content']['officer'].'" storyID="'.$story['content']['id'].'">';
-        echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].'] #'.$story['content']['id'].'</strong> '.$story['content']['title'].'</h4></div>';
-        echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
+?>
         
-        ?>
+          <div class="alert fade in">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <strong>Hi there!</strong> You have not created any stories yet, but you can do so by pressing a button below!
+          </div>
+        
+<?php
 
-        <div class="storyBlockRight">
-            <div class="btn-group">
-                <a class="btn" href="javascript: return false;"><?php echo $currentStatusTitle; ?></a>
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="javascript: return false;">Mark as Finished</a></li>
-                    <li class="divider"></li>
-                    <li><a href="javascript: return false;"><i class="icon-lock"></i> Accept</a></li>
-                    <li><a href="javascript: return false;"><i class="icon-retweet"></i> Reject</a></li>
-		    <li class="divider"></li>
-		    <li><a href="javascript: return false;" class="deleteStory" storyID="<?php echo $story['content']['id']; ?>"><i class="icon-remove"></i> Delete Story</a></li>
-                </ul>
+    } else {
+        
+    // render stories list
+        
+        foreach ($this->stories as $story) {
+
+            $subtitle = 'Author: '.$story['content']['author'].' | Officer: '.$story['content']['officer'];
+            $commentsCount = count($story['comments']);
+            $currentStatusTitle = 'Mark as Started';
+
+            echo '<div class="alert alert-info story" storyStatus="'.$story['content']['status'].'" storyOfficer="'.$story['content']['officer'].'" storyID="'.$story['content']['id'].'">';
+            echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].'] #'.$story['content']['id'].'</strong> '.$story['content']['title'].'</h4></div>';
+            echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
+
+            ?>
+
+            <div class="storyBlockRight">
+                <div class="btn-group">
+                    <a class="btn" href="javascript: return false;"><?php echo $currentStatusTitle; ?></a>
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript: return false;">Mark as Finished</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript: return false;"><i class="icon-lock"></i> Accept</a></li>
+                        <li><a href="javascript: return false;"><i class="icon-retweet"></i> Reject</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript: return false;" class="deleteStory" storyID="<?php echo $story['content']['id']; ?>"><i class="icon-remove"></i> Delete Story</a></li>
+                    </ul>
+                </div>
+                <a class="btn commentbutton tooltiped" data-original-title="Toggle comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
             </div>
-             <a class="btn commentbutton tooltiped" data-original-title="Toggle comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
+
         </div>
-       
+        <div class="storyComments">
+            
+
+<?php
+
+            foreach ($story['comments'] as $comment) {
+                echo '<pre id="cmt'.$comment['id'].'">'.$comment['author'].' wrote: '.$comment['text'].'<a class="removeComment" title="Delete Comment" href="#" commentID="'.$comment['id'].'">×</a></pre>';
+            }
+
+?>
+            
+            <textarea class="input-xlarge" id="commentTextarea<?php echo $story['content']['id']; ?>" rows="2"></textarea>
+            <a class="btn addCommentBtn" storyID="<?php echo $story['content']['id']; ?>">Add comment</a>
+        </div>
+
+
     </div>
-    <div class="storyComments">
-    <?php
-        foreach ($story['comments'] as $comment) {
-            echo '<pre id="cmt'.$comment['id'].'">'.$comment['author'].' wrote: '.$comment['text'].'<i class="icon-remove removeComment" title="Delete Comment" commentID="'.$comment['id'].'"></i></pre>';
+
+<?php
+
         }
-    
-    ?>
-        <textarea class="input-xlarge" id="commentTextarea<?php echo $story['content']['id']; ?>" rows="2"></textarea>
-        <a class="btn addCommentBtn" storyID="<?php echo $story['content']['id']; ?>">Add comment</a>
-    </div>
-    
-    
 
-</div>
-
-        <?php
+        
     }
-
 ?>
 
 <a class="btn btn-primary" id="storyAdd" href="javascript: return false;">Add new story</a>
