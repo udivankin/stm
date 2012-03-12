@@ -1,3 +1,7 @@
+<?php 
+    $statuses = array('New','Started','Finished','Accepter','Rejected'); 
+?>
+
 <div class="row">
     
     <div class="span2 well" style="padding: 8px 0;">
@@ -10,11 +14,11 @@
         <li class="nav-header">
             Filter by status:
         </li>
-        <li><a href="#">1. New</a></li>
-        <li><a href="#">2. Started</a></li>
-        <li><a href="#">3. Finished</a></li>
-        <li><a href="#">4. Accepter</a></li>
-        <li><a href="#">5. Rejected</a></li>
+        <li><a href="#"><?php echo $statuses[0]; ?></a></li>
+        <li><a href="#"><?php echo $statuses[1]; ?></a></li>
+        <li><a href="#"><?php echo $statuses[2]; ?></a></li>
+        <li><a href="#"><?php echo $statuses[3]; ?></a></li>
+        <li><a href="#"><?php echo $statuses[4]; ?></a></li>
         </ul>
     </div>
     
@@ -29,8 +33,8 @@
         $commentsCount = count($story['comments']);
         $currentStatusTitle = 'Mark as Started';
         
-        echo '<div class="alert alert-info" id="story'.$story['content']['id'].'">';
-        echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>#'.$story['content']['id'].'</strong> '.$story['content']['title'].'</h4></div>';
+        echo '<div class="alert alert-info" storyStatus="'.$story['content']['status'].'" storyOfficer="'.$story['content']['officer'].'" storyID="'.$story['content']['id'].'">';
+        echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].'] #'.$story['content']['id'].'</strong> '.$story['content']['title'].'</h4></div>';
         echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
         
         ?>
@@ -45,22 +49,24 @@
                     <li><a href="#">Mark as Finished</a></li>
                     <li class="divider"></li>
                     <li><a href="#"><i class="icon-ok"></i> Accept</a></li>
-                    <li><a href="#"><i class="icon-remove"></i></i> Reject</a></li>
+                    <li><a href="#"><i class="icon-retweet"></i> Reject</a></li>
+		    <li class="divider"></li>
+		    <li><a href="#"><i class="icon-remove"></i> Delete Story</a></li>
                 </ul>
             </div>
-             <a class="btn commentbutton tooltiped" data-original-title="Show comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
+             <a class="btn commentbutton tooltiped" data-original-title="Toggle comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
         </div>
        
     </div>
     <div class="storyComments">
     <?php
         foreach ($story['comments'] as $comment) {
-            echo '<pre>'.$comment['author'].' wrote: '.$comment['text'].'</pre>';
+            echo '<pre>'.$comment['author'].' wrote: '.$comment['text'].'<i class="icon-remove removeComment" title="Delete Comment" commentID="'.$comment['id'].'"></i></pre>';
         }
     
     ?>
-        <textarea class="input-xlarge" id="textarea" rows="2"></textarea>
-        <a class="btn">Add comment</a>
+        <textarea class="input-xlarge" id="commentTextarea<?php echo $story['content']['id']; ?>" rows="2"></textarea>
+        <a class="btn addCommentBtn" storyID="<?php echo $story['content']['id']; ?>">Add comment</a>
     </div>
     
     

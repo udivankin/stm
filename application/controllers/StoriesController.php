@@ -10,10 +10,11 @@ class StoriesController extends Zend_Controller_Action
             $this->stories = new Application_Model_DbTable_Stories();
             $this->comments = new Application_Model_DbTable_Comments();            
 	    $this->view->userInfo = Zend_Auth::getInstance()->getStorage()->read();
+	    $this->userInfo = Zend_Auth::getInstance()->getStorage()->read();
         }
         else {
             $this->_helper->redirector('login','Auth');
-        }
+	}
     }
 
     public function indexAction()
@@ -29,6 +30,38 @@ class StoriesController extends Zend_Controller_Action
 	
     }
 
+    public function addCommentAction()
+    {
+        // action body
+	//$this->_helper->layout->disableLayout();
+	
+	if ($this->getRequest()->isPost()) {
+	    $commentText = false;
+	    $storyID = false;
+	    $intValidator = new Zend_Validate_Digits();
+	    if ($intValidator->isValid($this->_getParam('storyID'))) {
+		$storyID = $this->_getParam('storyID');
+	    }
+	    // TODO: XSS and REGEX in comment field
+	    $regexValidator = new Zend_Validate_Regex(array('pattern' => '/^[а-яa-z0-9\.\,\:\#\(\)\{\}\[\]\_\-\+\&\?\!\@\"\'\=\;]/i'));
+	    if ($regexValidator->isValid($this->_getParam('commentText'))) {
+		$commentText = $this->_getParam('commentText');
+	    }
+	    if ($storyID && $commentText) {
+		$comments = new Application_Model_DbTable_Comments();
+		$comments->addComment($storyID, $this->userInfo->username, $commentText);
+		$res['result']=1;
+		$res['text']=$this->userInfo->username.' wrote: '.$commentText;
+	    } else {
+		$res['result']=0;
+	    }
+	    $this->view->output = $res;
+	    
+	}
+    }
+
 
 }
+
+
 
