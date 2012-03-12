@@ -52,3 +52,6 @@ body {
     right:4px;
     cursor: pointer;
 }
+.modal {
+    display: none;
+}

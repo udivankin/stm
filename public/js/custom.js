@@ -20,6 +20,21 @@ $(document).ready(function() {
 	$('.story[storyStatus="'+statusID+'"]').fadeIn(200);
     });
     
+    
+    $(".btnModalClose").click(function() {
+	 $('div.modal').modal('hide');
+    });
+    
+    $(".removeComment").click(function() {
+	 $('#deleteCommentModal').modal('show');
+	 var cID = $(this).attr('commentID');
+    });
+    
+    $(".deleteStory").click(function() {
+	$('#deleteStoryModal').modal('show');
+	var sID = $(this).attr('storyID');
+    });
+    
     $(".addCommentBtn").click(function() {
 	var sID = $(this).attr('storyID');
 	var cText = $("#commentTextarea"+sID).val();
