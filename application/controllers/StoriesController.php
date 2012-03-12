@@ -78,7 +78,15 @@ class StoriesController extends Zend_Controller_Action
 
     public function deleteStoryAction()
     {
-        // action body
+	if ($this->getRequest()->isPost()) {
+	    $result = 0;
+	    $intValidator = new Zend_Validate_Digits();
+	    if ($intValidator->isValid($this->_getParam('storyID'))) {
+		$this->stories->deleteStory($this->_getParam('storyID'));
+		$result = 1;
+	    }
+	    $this->view->output = array('result'=>$result);	    
+	}
     }
 
     public function updateStoryAction()

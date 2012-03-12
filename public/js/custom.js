@@ -79,6 +79,30 @@ $(document).ready(function() {
     $(".deleteStory").click(function() {
 	$('#deleteStoryModal').modal('show');
 	var sID = $(this).attr('storyID');
+        $('#btnConfirmDeleteStory').attr('storyID',sID);
+    });
+    $("#btnConfirmDeleteStory").click(function() {
+	 var sID = $(this).attr('storyID');
+	 var request = $.ajax({
+	    url: "/stories/delete-story",
+	    type: "POST",
+	    data: {storyID: sID},
+	    dataType: "html"
+	 });
+	 request.done(function(data) {
+	    var resp = eval('(' + data + ')');
+	    if (resp.result==1) {
+		$("div[storyid='"+sID+"']").hide();
+	    } else {
+                alert('xxx');
+		$("div[storyid='"+sID+"']").after('<div class="alert alert-error">Server message: error deleting story.</div>');
+	    }
+	    $('div.modal').modal('hide');
+	 });
+	 request.fail(function(jqXHR, textStatus) {
+	    $("div[storyid='"+sID+"']").after('<div class="alert alert-error">Error while connecting to server.</div>');
+	    $('div.modal').modal('hide');
+	 });
     });
     
     /* add comment ajax */ 
