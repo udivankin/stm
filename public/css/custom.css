@@ -18,8 +18,12 @@ body {
     top:0px;
     right:0px;
 }
+.storyBlockRight .storyRating {
+    float:left;
+    padding: 5px 20px 0 0;
+}
 .storyBlockRight .btn-group{
-    margin-left:10px;    
+    margin-left:10px;
     float:right;    
 }
 .storyBlockRight input.btn{
@@ -92,3 +96,55 @@ a.removeComment:hover{
     border-radius: 4px;
     width: 170px;
 }
+
+/* rating stars css [www.pmob.co.uk/temp/star-rating.htm] */
+.starRating{
+	width:80px;
+	height:16px;
+	margin:0 0 20px 0;
+	padding:0;
+	list-style:none;
+	clear:both;
+	position:relative;
+	background: url(/img/star-matrix.gif) no-repeat 0 0;
+}
+.starRating.nostar {background-position:0 0}
+.starRating.onestar {background-position:0 -16px}
+.starRating.twostar {background-position:0 -32px}
+.starRating.threestar {background-position:0 -48px}
+.starRating.fourstar {background-position:0 -64px}
+.starRating.fivestar {background-position:0 -80px}
+ul.starRating li {
+	cursor: pointer;
+ /*ie5 mac doesn't like it if the list is floated\*/
+	float:left;
+	/* end hide*/
+	text-indent:-999em;
+}
+ul.starRating li a {
+	position:absolute;
+	left:0;
+	top:0;
+	width:16px;
+	height:16px;
+	text-decoration:none;
+	z-index: 200;
+}
+ul.starRating li.one a {left:0}
+ul.starRating li.two a {left:16px;}
+ul.starRating li.three a {left:32px;}
+ul.starRating li.four a {left:48px;}
+ul.starRating li.five a {left:64px;}
+ul.starRating li a:hover {
+	z-index:2;
+	width:80px;
+	height:16px;
+	overflow:hidden;
+	left:0;	
+	background: url(/img/star-matrix.gif) no-repeat 0 0
+}
+ul.starRating li.one a:hover {background-position:0 -96px;}
+ul.starRating li.two a:hover {background-position:0 -112px;}
+ul.starRating li.three a:hover {background-position:0 -128px}
+ul.starRating li.four a:hover {background-position:0 -144px}
+ul.starRating li.five a:hover {background-position:0 -160px}

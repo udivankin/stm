@@ -1,6 +1,6 @@
 <?php 
 
-    $statuses = array('New','Started','Finished','Accepted','Rejected');
+    $statuses = array('new','started','finished','accepted','rejected');
     
 ?>
 
@@ -13,7 +13,7 @@
     <p>Are you sure you want to delete this comment?</p>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary" id="btnConfirmDeleteComment">Yes</a>
+    <a href="#" class="btn btn-danger" id="btnConfirmDeleteComment">Yes</a>
     <a href="#" class="btn btnModalClose">No, thanks</a>
   </div>
 </div>
@@ -27,8 +27,29 @@
     <p>Are you sure you want to delete this story?</p>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-primary" id="btnConfirmDeleteStory">Yes</a>
+    <a href="#" class="btn btn-danger" id="btnConfirmDeleteStory">Yes</a>
     <a href="#" class="btn btnModalClose">No, thanks</a>
+  </div>
+</div>
+
+<div class="modal" id="rateStoryModal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Rate solution</h3>
+  </div>
+  <div class="modal-body">
+    <p>Please rate the solution provided to this story using 1-5 star rating</p>
+	<ul class="starRating"">
+	    <li class="one"><a href="javascript: return false;">1</a></li>
+	    <li class="two"><a href="javascript: return false;">2</a></li>
+	    <li class="three"><a href="javascript: return false;">3</a></li>
+	    <li class="four"><a href="javascript: return false;">4</a></li>
+	    <li class="five"><a href="javascript: return false;">5</a></li>
+	</ul>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-success" id="btnSetRatingAccept">Rate and Accept</i></a>
+    <a href="#" class="btn btn-danger" id="btnSetRatingReject">Rate and Reject</i></a>
   </div>
 </div>
 
@@ -89,32 +110,61 @@
             $subtitle = 'Author: '.$story['content']['author'].' | Officer: '.$story['content']['officer'];
             $commentsCount = count($story['comments']);
             $currentStatusTitle = 'Mark as Started';
+	    $storyID = $story['content']['id'];
 
             echo '<div class="alert alert-info story" storyStatus="'.$story['content']['status'].'" storyOfficer="'.$story['content']['officer'].'" storyID="'.$story['content']['id'].'">';
-            echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].'] #'.$story['content']['id'].'</strong> '.$story['content']['title'].'</h4></div>';
+            echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].'] #'.$storyID.'</strong> '.$story['content']['title'].'</h4></div>';
             echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
 
             ?>
 
             <div class="storyBlockRight">
+		
                 <div class="btn-group">
-                    <a class="btn" href="javascript: return false;"><?php echo $currentStatusTitle; ?></a>
+		    
+<?php
+	    $markAsStartedDisabled = '';
+	    $markAsFinishedDisabled = '';
+	    $markAcceptRejectDisabled = '';
+	    
+	    if ($story['content']['author'] != $this->userInfo->username) {
+		    $markAcceptRejectDisabled='disabled';
+	    }	
+	    if ($story['content']['officer'] != $this->userInfo->username) {
+		    $markAsStartedDisabled='disabled';
+		    $markAsFinishedDisabled='disabled';
+	    }
+	    
+	    switch ($story['content']['status']) {
+		 case 0: 
+		    echo '<a class="btn setStoryStatus '.$markAsStartedDisabled.'" href="javascript: return false;" statusToBeSet="1" storyID="'.$storyID.'">Mark as started</a>';
+		    break;
+		 case 1: 
+		    echo '<a class="btn setStoryStatus '.$markAsFinishedDisabled.'" href="javascript: return false;" statusToBeSet="2" storyID="'.$storyID.'">Mark as Finished</a>';
+		    break;
+		 case 2: 
+		    echo '<a class="btn acceptRejectStory '.$markAcceptRejectDisabled.'" href="javascript: return false;" statusToBeSet="3" storyID="'.$storyID.'">Accept / Reject</a></a>';
+		    break;
+		 case 3: 
+		 case 4:     
+		    echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';
+		    break;	
+	    }
+?>
+                    
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript: return false;">Mark as Finished</a></li>
-                        <li class="divider"></li>
-                        <li><a href="javascript: return false;"><i class="icon-lock"></i> Accept</a></li>
-                        <li><a href="javascript: return false;"><i class="icon-retweet"></i> Reject</a></li>
-                        <li class="divider"></li>
-                        <li><a href="javascript: return false;" class="deleteStory" storyID="<?php echo $story['content']['id']; ?>"><i class="icon-remove"></i> Delete Story</a></li>
+                        <li><a href="javascript: return false;" class="editStory" storyID="<?php echo $storyID; ?>"><i class="icon-pencil"></i> Edit Story</a></li>			
+                        <li><a href="javascript: return false;" class="deleteStory" storyID="<?php echo $storyID; ?>"><i class="icon-remove"></i> Delete Story</a></li>
                     </ul>
                 </div>
                 <a class="btn commentbutton tooltiped" data-original-title="Toggle comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
             </div>
 
         </div>
+      
         <div class="storyComments">
             
 
@@ -126,8 +176,8 @@
 
 ?>
             
-            <textarea class="input-xlarge" id="commentTextarea<?php echo $story['content']['id']; ?>" rows="2"></textarea>
-            <a class="btn addCommentBtn" storyID="<?php echo $story['content']['id']; ?>">Add comment</a>
+            <textarea class="input-xlarge" id="commentTextarea<?php echo $storyID; ?>" rows="2"></textarea>
+            <a class="btn addCommentBtn" storyID="<?php echo $storyID; ?>">Add comment</a>
         </div>
 
 

@@ -32,7 +32,6 @@ $(document).ready(function() {
 	$(this).parent().siblings().removeClass('active');
 	$(this).parent().addClass('active');
     });
- 
     $(".resetFilters").click(function() {
 	$('#storyFilters li').removeClass('active');
 	$('.story').fadeIn(200);
@@ -50,19 +49,17 @@ $(document).ready(function() {
          var cID = $(this).attr('commentID');
          $('#btnConfirmDeleteComment').attr('commentID',cID);
     });
-
     $("#btnConfirmDeleteComment").click(function() {
 	 var cID = $(this).attr('commentID');
 	 var request = $.ajax({
 	    url: "/stories/delete-comment",
 	    type: "POST",
 	    data: {commentID: cID},
-	    dataType: "html"
+	    dataType: "json"
 	 });
-	 request.done(function(data) {
-	    var resp = eval('(' + data + ')');
+	 request.done(function(resp) {
 	    if (resp.result==1) {
-		$("#cmt"+cID).hide();
+		$("#cmt"+cID).fadeOut(200);
 	    } else {
                 alert('xxx');
 		$("#cmt"+cID).after('<div class="alert alert-error">Server message: error deleting comment.</div>');
@@ -74,6 +71,22 @@ $(document).ready(function() {
 	    $('div.modal').modal('hide');
 	 });
     });
+
+    /* rate accept reject story ajax */ 
+    $(".acceptRejectStory").click(function() {
+	if ($(this).hasClass('disabled')) return false;
+	$('#rateStoryModal').modal('show');
+	var sID = $(this).attr('storyID');
+        $('#btnSetRatingAccept').attr('storyID',sID);
+        $('#btnSetRatingReject').attr('storyID',sID);	
+    });
+    $(".btnSetRatingAccept").click(function() {
+	
+    });
+    $(".btnSetRatingReject").click(function() {
+	
+    });
+    
     
     /* delete story ajax */ 
     $(".deleteStory").click(function() {
@@ -87,12 +100,11 @@ $(document).ready(function() {
 	    url: "/stories/delete-story",
 	    type: "POST",
 	    data: {storyID: sID},
-	    dataType: "html"
+	    dataType: "json"
 	 });
-	 request.done(function(data) {
-	    var resp = eval('(' + data + ')');
+	 request.done(function(resp) {
 	    if (resp.result==1) {
-		$("div[storyid='"+sID+"']").hide();
+		$("div[storyid='"+sID+"']").fadeOut(200);
 	    } else {
                 alert('xxx');
 		$("div[storyid='"+sID+"']").after('<div class="alert alert-error">Server message: error deleting story.</div>');
@@ -113,10 +125,9 @@ $(document).ready(function() {
 	    url: "/stories/add-comment",
 	    type: "POST",
 	    data: {storyID: sID, commentText: cText},
-	    dataType: "html"
+	    dataType: "json"
 	});
-	request.done(function(data) {
-	    var resp = eval('(' + data + ')');
+	request.done(function(resp) {
 	    if (resp.result==1) {
 		$("#commentTextarea"+sID).before('<pre>'+resp.text+'</pre>');
 		$("#commentTextarea"+sID).val('');
@@ -128,5 +139,28 @@ $(document).ready(function() {
 	    $("#commentTextarea"+sID).before('<div class="alert alert-error">Error while pushing comment to server.</div>');
 	});
     });
-	
+
+    /* set story status ajax */ 
+    $(".setStoryStatus").click(function() {
+	if ($(this).hasClass('disabled')) return false;
+	var sID = $(this).attr('storyID');
+	var statusToBeSet = $(this).attr('statusToBeSet');
+	var request = $.ajax({
+	    url: "/stories/update-story-status",
+	    type: "POST",
+	    data: {storyID: sID, storyStatus: statusToBeSet},
+	    dataType: "json"
+	});
+	request.done(function(resp) {
+	    if (resp.result==1) {
+		location.reload();
+	    } else {
+		$(".story[storyID="+sID+"]").after('<div class="alert alert-error">Server message: error updating  status.</div>');
+	    }
+	});
+	request.fail(function(jqXHR, textStatus) {
+	    $(".story[storyID="+sID+"]").before('<div class="alert alert-error">Error while pushing status update to server.</div>');
+	});
+    });
+    
 });

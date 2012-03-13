@@ -33,6 +33,11 @@ class Application_Model_DbTable_Stories extends Zend_Db_Table_Abstract
         $this->update($data, 'id = '.$id);
     }
     
+    public function updateStoryStatus($id,$status)
+    {
+        $this->update(array('status' => $status), 'id = '.$id);
+    }
+    
     public function deleteStory($id)
     {
         $this->delete('id = '.$id);
@@ -40,7 +45,7 @@ class Application_Model_DbTable_Stories extends Zend_Db_Table_Abstract
 
     public function getStoriesOfficerList()
     {
-        $result = $this->fetchAll($this->select()->from($this, array('officer'))->group('officer'));
+        $result = $this->fetchAll($this->select()->from($this->_name, array('officer'))->group('officer'));
 	return $result;
     }
     

@@ -9,9 +9,21 @@ class StoriesController extends Zend_Controller_Action
 	if (Zend_Auth::getInstance()->hasIdentity()) {
             $this->stories = new Application_Model_DbTable_Stories();
             $this->comments = new Application_Model_DbTable_Comments();
+	    // current user auth data fo view
 	    $this->view->userInfo = Zend_Auth::getInstance()->getStorage()->read();
+	    // and for controller
 	    $this->userInfo = Zend_Auth::getInstance()->getStorage()->read();
+	    // init ajax context for specified actions
+	    $ajaxContext = $this->_helper->getHelper('AjaxContext');
+	    $ajaxContext->addActionContext('updateStoryStatus', 'json')
+			->addActionContext('updateStoryRating', 'json')
+			->addActionContext('deleteStory', 'json')
+			->addActionContext('addComment', 'json')
+			->addActionContext('deleteComment', 'json')	    
+			->addActionContext('addStory', 'html')
+			->initContext();
         }
+	// otherwise redirect to login page
         else $this->_helper->redirector('login','Auth');
     }
 
@@ -31,9 +43,7 @@ class StoriesController extends Zend_Controller_Action
     public function addCommentAction()
     {
         // action body
-	//$this->_helper->layout->disableLayout();
-	
-	if ($this->getRequest()->isPost()) {
+	if ($this->getRequest()->isXmlHttpRequest()) { 
 	    $commentText = false;
 	    $storyID = false;
 	    $intValidator = new Zend_Validate_Digits();
@@ -52,22 +62,26 @@ class StoriesController extends Zend_Controller_Action
 	    } else {
 		$res['result']=0;
 	    }
-	    $this->view->output = $res;
-	} 
+	    $this->_helper->json($res);
+	} else { 
+	    $this->_helper->redirector('error','Error'); 
+	}
 	
     }
 
     public function deleteCommentAction()
     {
         // action body
-	if ($this->getRequest()->isPost()) {
+	if ($this->getRequest()->isXmlHttpRequest()) { 
 	    $result = 0;
 	    $intValidator = new Zend_Validate_Digits();
 	    if ($intValidator->isValid($this->_getParam('commentID'))) {
 		$this->comments->deleteComment($this->_getParam('commentID'));
 		$result = 1;
 	    }
-	    $this->view->output = array('result'=>$result);	    
+	    $this->_helper->json(array('result'=>$result));
+	} else { 
+	    $this->_helper->redirector('error','Error'); 
 	}
     }
 
@@ -78,14 +92,16 @@ class StoriesController extends Zend_Controller_Action
 
     public function deleteStoryAction()
     {
-	if ($this->getRequest()->isPost()) {
+	if ($this->getRequest()->isXmlHttpRequest()) {
 	    $result = 0;
 	    $intValidator = new Zend_Validate_Digits();
 	    if ($intValidator->isValid($this->_getParam('storyID'))) {
 		$this->stories->deleteStory($this->_getParam('storyID'));
 		$result = 1;
 	    }
-	    $this->view->output = array('result'=>$result);	    
+	    $this->_helper->json(array('result'=>$result));
+	} else { 
+	    $this->_helper->redirector('error','Error'); 
 	}
     }
 
@@ -97,10 +113,50 @@ class StoriesController extends Zend_Controller_Action
     public function updateStoryStatusAction()
     {
         // action body
+	if ($this->getRequest()->isXmlHttpRequest()) {
+	    $result = 0;
+	    $intValidator = new Zend_Validate_Digits();
+	    if ($intValidator->isValid($this->_getParam('storyID'))) {
+		$storyID = $this->_getParam('storyID');
+	    }
+	    if ($intValidator->isValid($this->_getParam('storyStatus'))) {
+		$storyStatus = $this->_getParam('storyStatus');
+	    }	    
+	    if ($storyID && $storyStatus) {
+		$this->stories->updateStoryStatus($storyID,$storyStatus);
+	    	$result = 1;
+	    }	 
+	    $this->_helper->json(array('result'=>$result));
+	} else { 
+	    $this->_helper->redirector('error','Error'); 
+	}
+    }
+
+    public function setStoryRatingAction()
+    {
+	if ($this->getRequest()->isXmlHttpRequest()) {
+	    $result = 0;
+	    $intValidator = new Zend_Validate_Digits();
+	    if ($intValidator->isValid($this->_getParam('storyID'))) {
+		$storyID = $this->_getParam('storyID');
+	    }
+	    if ($intValidator->isValid($this->_getParam('storyRating'))) {
+		$storyRating = $this->_getParam('storyRating');
+	    }	    
+	    if ($storyID && $storyRating) {
+		$this->stories->setStoryRating($storyID,$storyRating);
+	    	$result = 1;
+	    }	 
+	    $this->_helper->json(array('result'=>$result));
+	} else { 
+	    $this->_helper->redirector('error','Error'); 
+	}
     }
 
 
 }
+
+
 
 
 
