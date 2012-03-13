@@ -172,7 +172,7 @@
 	    
 	    if (!$markStoryReadOnly) { 
 		echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a><ul class="dropdown-menu">';
-		echo '<li><a href="javascript: return false;" class="editStory" storyID="'.$storyID.'"><i class="icon-pencil"></i> Edit Story</a></li>';	
+		echo '<li><a href="/stories/update-story/id/'.$storyID.'" class="editStory" storyID=""><i class="icon-pencil"></i> Edit Story</a></li>';	
 		echo '<li><a href="javascript: return false;" class="deleteStory" storyID="'.$storyID.'"><i class="icon-remove"></i> Delete Story</a></li>';
 		echo '</ul>';
 	    } 

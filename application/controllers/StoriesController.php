@@ -88,15 +88,16 @@ class StoriesController extends Zend_Controller_Action
   
 	// form rendering 
 	$form = new Application_Form_Story();
-	
+	// validation
 	if($this->getRequest()->isPost()){
             if($form->isValid($_POST)){
 		$data = $form->getValues();
+		// add story using model
 	        $this->stories->addStory($data['title'],$data['desc'],$this->userInfo->username,$data['officer']);
+		// redirect ro stories list
+		$this->_helper->redirector('index','Stories'); 
 	    }
-	    $this->_helper->redirector('index','Stories'); 
 	}
-	$this->view->myCustomTitle = 'Create story';
 	$this->view->form = $form;
 
     }
@@ -120,16 +121,33 @@ class StoriesController extends Zend_Controller_Action
     {
 	// form rendering 
 	$form = new Application_Form_Story();
-	
+	// validation
 	if($this->getRequest()->isPost()){
             if($form->isValid($_POST)){
 		$data = $form->getValues();
-	        $this->stories->addStory($data['title'],$data['desc'],$this->userInfo->username,$data['officer']);
+		// Security check
+		if ($this->stories->isAuthor($data['id'],$this->userInfo->username)) {		
+		    // add story using model $id,$title,$desc,$officer			
+		    $this->stories->updateStory($data['id'],$data['title'],$data['desc'],$data['officer']);
+		    // redirect ro stories list
+		    $this->_helper->redirector('index','Stories'); 
+		} else {
+		    $this->_helper->redirector('error','Error'); 
+		}
 	    }
-	    $this->_helper->redirector('index','Stories'); 
+	} else {
+	    $id = $this->_getParam('id');
+	    if ($id) {
+		$data = $this->stories->getStory($id);
+		if ($data) { 
+		    $form->populate($data);
+		} else {
+		    $this->_helper->redirector('error','Error'); 
+		}
+	    }
+	    $this->view->form = $form;
 	}
-	$this->view->myCustomTitle = 'Create story';
-	$this->view->form = $form;
+	
     }
 
     public function updateStoryStatusAction()

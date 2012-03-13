@@ -18,15 +18,22 @@ class Application_Model_DbTable_Stories extends Zend_Db_Table_Abstract
         $this->insert($data);
     }
     
-    public function updateStory($id,$title,$desc,$author,$officer,$rating,$status)
+    public function getStory($id) {
+        $result = $this->fetchRow('id = '.$id);
+	if ($result) return array('id'=>$id,'title'=>$result['title'],'desc'=>$result['desc'],'officer'=>$result['officer']);
+    }
+ 
+    public function isAuthor($id,$author) {
+        $result = $this->fetchRow('id = '.$id.' AND author = "'.$author.'"');
+	if ($result) return true;
+    }
+    
+    public function updateStory($id,$title,$desc,$officer)
     {
         $data = array(
             'title' => $title,
             'desc' => $desc,
-            'author' => $author,
             'officer' => $officer,
-            'rating' => $rating,
-            'status'=>$status
         );
         $this->update($data, 'id = '.$id);
     }

@@ -33,11 +33,11 @@ class Application_Form_Story extends Zend_Form
 	
 	$officer = new Zend_Form_Element_Select('officer');
         $officer->setLabel('Officer:')
-            ->setRequired(false)
+            ->setRequired(true)
             ->addFilter('StripTags')
             ->addFilter('StringTrim')
 	    ->addValidator('Alnum')
-            ->addMultiOption(0,' please choose officer');
+            ->addMultiOption(false, 'please choose officer');
 	
         foreach ($usersArr as $user) {
             $officer->addMultiOption($user->username,$user->username);

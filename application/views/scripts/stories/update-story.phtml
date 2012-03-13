@@ -1,4 +1,7 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Stories</b> and script/action name <b>updateStory</b></p>
-</div>
+<?php
+    $this->myCustomTitle = "&rarr; update story";
+    if (isset($this->errMessage)) {
+	echo '<div class="alert alert-error">'.$this->errMessage.'</div>';
+    }
+    echo $this->form;
+?>
