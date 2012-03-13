@@ -111,9 +111,13 @@
             $commentsCount = count($story['comments']);
             $currentStatusTitle = 'Mark as Started';
 	    $storyID = $story['content']['id'];
-
+	    
+	    if ($story['content']['rating']>0) {
+		 $ratedText=' and rated '.$story['content']['rating'];
+	    } else { $ratedText=''; }
+	    
             echo '<div class="alert alert-info story" storyStatus="'.$story['content']['status'].'" storyOfficer="'.$story['content']['officer'].'" storyID="'.$story['content']['id'].'">';
-            echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].'] #'.$storyID.'</strong> '.$story['content']['title'].'</h4></div>';
+            echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].$ratedText.'] #'.$storyID.'</strong> '.$story['content']['title'].'</h4></div>';
             echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
 
             ?>
