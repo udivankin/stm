@@ -126,6 +126,12 @@
                 <div class="btn-group">
 		    
 <?php
+            // command show / diasable logics
+            // input parameters: isOfficer, isAuthor, isRelated.
+            // output: if not related - hide command buttons
+            // if isOfficer - hide Authors actions
+            // if isAuthor - hide Officers actions
+
 	    $markAsStartedDisabled = '';
 	    $markAsFinishedDisabled = '';
 	    $markAcceptRejectDisabled = '';
@@ -164,10 +170,15 @@
 		 case 2: 
 		    if ($markAsAuthor) echo '<a class="btn acceptRejectStory'.$markAcceptRejectDisabled.'" href="javascript: return false;" statusToBeSet="3" storyID="'.$storyID.'">Accept / Reject</a></a>';
 		    break;
-		 case 3: 
+		 case 3:
+		    if (!$markStoryReadOnly) echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';                     
 		 case 4:     
-		    if (!$markStoryReadOnly) echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';
-		    break;	
+                    if ($markAsOfficer) {
+                        echo '<a class="btn setStoryStatus'.$markAsStartedDisabled.'" href="javascript: return false;" statusToBeSet="1" storyID="'.$storyID.'">Mark as started</a>';
+                    } else {
+                        if (!$markStoryReadOnly) echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';
+                    }
+                    break;	
 	    }
 	    
 	    if (!$markStoryReadOnly) { 

@@ -204,4 +204,9 @@ $(document).ready(function() {
 	setStoryStatus(sID,statusToBeSet,location.reload());
     });
     
+    // refresh list
+    $(".refreshStories").click(function() {    
+        location.reload()
+    });
+    
 });

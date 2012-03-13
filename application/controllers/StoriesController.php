@@ -28,13 +28,20 @@ class StoriesController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $str = false;
+        $strIDs = $this->stories->getStoryIDs();
 	// fetch all related stories into an one big array
-	$result = $this->stories->fetchAll('author="'.$this->userInfo->username.'" or officer = "'.$this->userInfo->username.'"');
+	$result = $this->stories->getRelatedStories($this->userInfo->username);
         foreach ($result as $res) {
+            // highlight
+            foreach ($strIDs as $strID) {
+                $res['title'] = preg_replace('/#'.$strID.'\s/', '<a href="#">#'.$strID.'</a> ', $res['title']);
+                $res['desc'] = preg_replace('/#'.$strID.'\s/', '<a href="#">#'.$strID.'</a> ', $res['desc']);
+            }
             $storycomments = $this->comments->getCommentsByID($res['id']);
             $str[]=array('content'=>$res,'comments'=>$storycomments);
         }
-        if (isset($str)) $this->view->stories = $str;
+        if ($str) $this->view->stories = $str;
 	$this->view->officers = $this->stories->getStoriesOfficerList();
     }
 
@@ -74,8 +81,10 @@ class StoriesController extends Zend_Controller_Action
 	    $result = 0;
 	    $intValidator = new Zend_Validate_Digits();
 	    if ($intValidator->isValid($this->_getParam('commentID'))) {
-		$this->comments->deleteComment($this->_getParam('commentID'));
-		$result = 1;
+                if ($this->comments->isAuthor($this->_getParam('commentID'),$this->userInfo->username)) {
+                    $this->comments->deleteComment($this->_getParam('commentID'));
+                    $result = 1;
+                }
 	    }
 	    $this->_helper->json(array('result'=>$result));
 	} else { 
@@ -85,8 +94,7 @@ class StoriesController extends Zend_Controller_Action
 
     public function addStoryAction()
     {
-  
-	// form rendering 
+	// form instancing 
 	$form = new Application_Form_Story();
 	// validation
 	if($this->getRequest()->isPost()){
@@ -108,8 +116,11 @@ class StoriesController extends Zend_Controller_Action
 	    $result = 0;
 	    $intValidator = new Zend_Validate_Digits();
 	    if ($intValidator->isValid($this->_getParam('storyID'))) {
-		$this->stories->deleteStory($this->_getParam('storyID'));
-		$result = 1;
+                // security check
+                if ($this->stories->isAuthor($this->_getParam('storyID'),$this->userInfo->username)) {          
+                    $this->stories->deleteStory($this->_getParam('storyID'));
+                    $result = 1;
+                }
 	    }
 	    $this->_helper->json(array('result'=>$result));
 	} else { 
@@ -119,7 +130,7 @@ class StoriesController extends Zend_Controller_Action
 
     public function updateStoryAction()
     {
-	// form rendering 
+	// form instancing 
 	$form = new Application_Form_Story();
 	// validation
 	if($this->getRequest()->isPost()){
@@ -155,14 +166,16 @@ class StoriesController extends Zend_Controller_Action
         // action body
 	if ($this->getRequest()->isXmlHttpRequest()) {
 	    $result = 0;
+            // validate input params
 	    $intValidator = new Zend_Validate_Digits();
 	    if ($intValidator->isValid($this->_getParam('storyID'))) {
 		$storyID = $this->_getParam('storyID');
 	    }
 	    if ($intValidator->isValid($this->_getParam('storyStatus'))) {
 		$storyStatus = $this->_getParam('storyStatus');
-	    }	    
-	    if ($storyID && $storyStatus) {
+            }
+            // + security check
+	    if ($storyID && $storyStatus && $this->stories->isRelated($storyID,$this->userInfo->username)) {
 		$this->stories->updateStoryStatus($storyID,$storyStatus);
 	    	$result = 1;
 	    }	 
@@ -182,8 +195,9 @@ class StoriesController extends Zend_Controller_Action
 	    }
 	    if ($intValidator->isValid($this->_getParam('storyRating'))) {
 		$storyRating = $this->_getParam('storyRating');
-	    }	    
-	    if ($storyID && $storyRating) {
+	    }
+            // + security check            
+	    if ($storyID && $storyRating && $this->stories->isAuthor($storyID,$this->userInfo->username)) {
 		$this->stories->setStoryRating($storyID,$storyRating);
 	    	$result = 1;
 	    }	 

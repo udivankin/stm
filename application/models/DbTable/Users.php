@@ -20,6 +20,7 @@ class Application_Model_DbTable_Users extends Zend_Db_Table_Abstract
     }
     
     
+    // get username by email, needed by auth controller
     function getUserNameByEmail($email)
     {
         $row = $this->fetchRow("email = '$email'");
