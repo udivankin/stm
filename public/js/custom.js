@@ -73,20 +73,61 @@ $(document).ready(function() {
     });
 
     /* rate accept reject story ajax */ 
-    $(".acceptRejectStory").click(function() {
+    $("a.acceptRejectStory").click(function() {
 	if ($(this).hasClass('disabled')) return false;
 	$('#rateStoryModal').modal('show');
 	var sID = $(this).attr('storyID');
-        $('#btnSetRatingAccept').attr('storyID',sID);
-        $('#btnSetRatingReject').attr('storyID',sID);	
+        $('a#btnSetRatingAccept').attr('storyID',sID);
+        $('a#btnSetRatingReject').attr('storyID',sID);
     });
-    $(".btnSetRatingAccept").click(function() {
-	
+    $("a#btnSetRatingAccept").click(function() {
+	if ($(this).hasClass('disabled')) return false;
+	var sID = $(this).attr('storyID');
+	var ratingSet = $(this).attr('ratingSet');
+	setStoryStatus(sID,3);
+	setStoryRating(sID,ratingSet,location.reload());	
+	$('div.modal').modal('hide');
+	$('a#btnSetRatingAccept,a#btnSetRatingReject').addClass('disabled');
     });
-    $(".btnSetRatingReject").click(function() {
-	
+    $("a#btnSetRatingReject").click(function() {
+	if ($(this).hasClass('disabled')) return false;
+	var sID = $(this).attr('storyID');
+	var ratingSet = $(this).attr('ratingSet');	
+	setStoryStatus(sID,4);
+	setStoryRating(sID,ratingSet,location.reload());
+	$('div.modal').modal('hide');
+	$('a#btnSetRatingAccept,a#btnSetRatingReject').addClass('disabled');
     });
     
+    /* set story rating ajax */ 
+    var setStoryRating = function(sID,ratingToBeSet,callbackOnSuccess) {
+	var request = $.ajax({
+	    url: "/stories/set-story-rating",
+	    type: "POST",
+	    data: {storyID: sID, storyRating: ratingToBeSet},
+	    dataType: "json"
+	});
+	request.done(function(resp) {
+	    if (resp.result==1) {
+		if (callbackOnSuccess !== undefined) callbackOnSuccess();
+	    } else {
+		$(".story[storyID="+sID+"]").after('<div class="alert alert-error">Server message: error updating rating.</div>');
+	    }
+	});	
+    }
+    
+    $("#starRating li a").click(function() {
+	var ratingSet = $(this).text();
+	$("#starRating").removeClass('onestar twostar threestar fourstar fivestar');
+	if (ratingSet == '1') $("#starRating").addClass('onestar')
+	else if (ratingSet == '2') $("#starRating").addClass('twostar')
+	else if (ratingSet == '3') $("#starRating").addClass('threestar')
+	else if (ratingSet == '4') $("#starRating").addClass('fourstar')
+	else if (ratingSet == '5') $("#starRating").addClass('fivestar');	
+	$('a#btnSetRatingAccept').attr('ratingSet',ratingSet);
+	$('a#btnSetRatingReject').attr('ratingSet',ratingSet);
+	$('a#btnSetRatingAccept,a#btnSetRatingReject').removeClass('disabled');
+    });
     
     /* delete story ajax */ 
     $(".deleteStory").click(function() {
@@ -139,12 +180,9 @@ $(document).ready(function() {
 	    $("#commentTextarea"+sID).before('<div class="alert alert-error">Error while pushing comment to server.</div>');
 	});
     });
-
+    
     /* set story status ajax */ 
-    $(".setStoryStatus").click(function() {
-	if ($(this).hasClass('disabled')) return false;
-	var sID = $(this).attr('storyID');
-	var statusToBeSet = $(this).attr('statusToBeSet');
+    var setStoryStatus = function(sID,statusToBeSet,callbackOnSuccess) {
 	var request = $.ajax({
 	    url: "/stories/update-story-status",
 	    type: "POST",
@@ -153,14 +191,19 @@ $(document).ready(function() {
 	});
 	request.done(function(resp) {
 	    if (resp.result==1) {
-		location.reload();
+		if (callbackOnSuccess !== undefined) callbackOnSuccess();
 	    } else {
 		$(".story[storyID="+sID+"]").after('<div class="alert alert-error">Server message: error updating  status.</div>');
 	    }
-	});
-	request.fail(function(jqXHR, textStatus) {
-	    $(".story[storyID="+sID+"]").before('<div class="alert alert-error">Error while pushing status update to server.</div>');
-	});
+	});	
+    }
+    $(".setStoryStatus").click(function() {
+	if ($(this).hasClass('disabled')) return false;
+	var sID = $(this).attr('storyID');
+	var statusToBeSet = $(this).attr('statusToBeSet');
+	setStoryStatus(sID,statusToBeSet,location.reload());
     });
+    
+    
     
 });

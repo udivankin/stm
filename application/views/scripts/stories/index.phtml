@@ -39,7 +39,7 @@
   </div>
   <div class="modal-body">
     <p>Please rate the solution provided to this story using 1-5 star rating</p>
-	<ul class="starRating"">
+	<ul class="starRating" id="starRating">
 	    <li class="one"><a href="javascript: return false;">1</a></li>
 	    <li class="two"><a href="javascript: return false;">2</a></li>
 	    <li class="three"><a href="javascript: return false;">3</a></li>
@@ -48,8 +48,8 @@
 	</ul>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn btn-success" id="btnSetRatingAccept">Rate and Accept</i></a>
-    <a href="#" class="btn btn-danger" id="btnSetRatingReject">Rate and Reject</i></a>
+    <a href="#" class="btn btn-success disabled" id="btnSetRatingAccept">Rate and Accept</i></a>
+    <a href="#" class="btn btn-danger disabled" id="btnSetRatingReject">Rate and Reject</i></a>
   </div>
 </div>
 
@@ -128,22 +128,22 @@
 	    $markAcceptRejectDisabled = '';
 	    
 	    if ($story['content']['author'] != $this->userInfo->username) {
-		    $markAcceptRejectDisabled='disabled';
+		    $markAcceptRejectDisabled=' disabled';
 	    }	
 	    if ($story['content']['officer'] != $this->userInfo->username) {
-		    $markAsStartedDisabled='disabled';
-		    $markAsFinishedDisabled='disabled';
+		    $markAsStartedDisabled=' disabled';
+		    $markAsFinishedDisabled=' disabled';
 	    }
 	    
 	    switch ($story['content']['status']) {
 		 case 0: 
-		    echo '<a class="btn setStoryStatus '.$markAsStartedDisabled.'" href="javascript: return false;" statusToBeSet="1" storyID="'.$storyID.'">Mark as started</a>';
+		    echo '<a class="btn setStoryStatus'.$markAsStartedDisabled.'" href="javascript: return false;" statusToBeSet="1" storyID="'.$storyID.'">Mark as started</a>';
 		    break;
 		 case 1: 
-		    echo '<a class="btn setStoryStatus '.$markAsFinishedDisabled.'" href="javascript: return false;" statusToBeSet="2" storyID="'.$storyID.'">Mark as Finished</a>';
+		    echo '<a class="btn setStoryStatus'.$markAsFinishedDisabled.'" href="javascript: return false;" statusToBeSet="2" storyID="'.$storyID.'">Mark as Finished</a>';
 		    break;
 		 case 2: 
-		    echo '<a class="btn acceptRejectStory '.$markAcceptRejectDisabled.'" href="javascript: return false;" statusToBeSet="3" storyID="'.$storyID.'">Accept / Reject</a></a>';
+		    echo '<a class="btn acceptRejectStory'.$markAcceptRejectDisabled.'" href="javascript: return false;" statusToBeSet="3" storyID="'.$storyID.'">Accept / Reject</a></a>';
 		    break;
 		 case 3: 
 		 case 4:     

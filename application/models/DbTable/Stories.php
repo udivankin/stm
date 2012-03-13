@@ -37,6 +37,11 @@ class Application_Model_DbTable_Stories extends Zend_Db_Table_Abstract
     {
         $this->update(array('status' => $status), 'id = '.$id);
     }
+
+    public function setStoryRating($id,$rating)
+    {
+        $this->update(array('rating' => $rating), 'id = '.$id);
+    }
     
     public function deleteStory($id)
     {

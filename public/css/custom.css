@@ -98,7 +98,7 @@ a.removeComment:hover{
 }
 
 /* rating stars css [www.pmob.co.uk/temp/star-rating.htm] */
-.starRating{
+ul.starRating{
 	width:80px;
 	height:16px;
 	margin:0 0 20px 0;
@@ -108,12 +108,12 @@ a.removeComment:hover{
 	position:relative;
 	background: url(/img/star-matrix.gif) no-repeat 0 0;
 }
-.starRating.nostar {background-position:0 0}
-.starRating.onestar {background-position:0 -16px}
-.starRating.twostar {background-position:0 -32px}
-.starRating.threestar {background-position:0 -48px}
-.starRating.fourstar {background-position:0 -64px}
-.starRating.fivestar {background-position:0 -80px}
+ul.starRating.nostar {background-position:0 0}
+ul.starRating.onestar {background-position:0 -16px}
+ul.starRating.twostar {background-position:0 -32px}
+ul.starRating.threestar {background-position:0 -48px}
+ul.starRating.fourstar {background-position:0 -64px}
+ul.starRating.fivestar {background-position:0 -80px}
 ul.starRating li {
 	cursor: pointer;
  /*ie5 mac doesn't like it if the list is floated\*/
