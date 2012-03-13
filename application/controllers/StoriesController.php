@@ -20,7 +20,6 @@ class StoriesController extends Zend_Controller_Action
 			->addActionContext('deleteStory', 'json')
 			->addActionContext('addComment', 'json')
 			->addActionContext('deleteComment', 'json')	    
-			->addActionContext('addStory', 'html')
 			->initContext();
         }
 	// otherwise redirect to login page
@@ -29,9 +28,8 @@ class StoriesController extends Zend_Controller_Action
 
     public function indexAction()
     {
-	// fetch all stories into an one big array
-        // this client-side oriented approach is definately not for production :)
-	$result = $this->stories->fetchAll();
+	// fetch all related stories into an one big array
+	$result = $this->stories->fetchAll('author="'.$this->userInfo->username.'" or officer = "'.$this->userInfo->username.'"');
         foreach ($result as $res) {
             $storycomments = $this->comments->getCommentsByID($res['id']);
             $str[]=array('content'=>$res,'comments'=>$storycomments);
@@ -87,7 +85,20 @@ class StoriesController extends Zend_Controller_Action
 
     public function addStoryAction()
     {
-        // action body
+  
+	// form rendering 
+	$form = new Application_Form_Story();
+	
+	if($this->getRequest()->isPost()){
+            if($form->isValid($_POST)){
+		$data = $form->getValues();
+	        $this->stories->addStory($data['title'],$data['desc'],$this->userInfo->username,$data['officer']);
+	    }
+	    $this->_helper->redirector('index','Stories'); 
+	}
+	$this->view->myCustomTitle = 'Create story';
+	$this->view->form = $form;
+
     }
 
     public function deleteStoryAction()
@@ -107,7 +118,18 @@ class StoriesController extends Zend_Controller_Action
 
     public function updateStoryAction()
     {
-        // action body
+	// form rendering 
+	$form = new Application_Form_Story();
+	
+	if($this->getRequest()->isPost()){
+            if($form->isValid($_POST)){
+		$data = $form->getValues();
+	        $this->stories->addStory($data['title'],$data['desc'],$this->userInfo->username,$data['officer']);
+	    }
+	    $this->_helper->redirector('index','Stories'); 
+	}
+	$this->view->myCustomTitle = 'Create story';
+	$this->view->form = $form;
     }
 
     public function updateStoryStatusAction()

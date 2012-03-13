@@ -1,11 +1,11 @@
 <?php
 
-// TODO: ADD STORIES VIA ZEND FORMS & AJAX (if possible)
 // TODO: EDIT STORIES
 // TODO: STORY ID HIGHLIGHTING (maybe like #tag in twitter)
 // TODO: SQL security - GET only related stories, UPDATE/DELETE only own STORIES, DELETE ONLY OWN COMMENTS
 // TODO: PHPUNIT TESTING
-// 
+
+// TODO: ADD STORIES
 // DONE: Set disabled status to delete and edit buttons if user is not owner
 // DONE: STORY RATING (ensure that shown only for Author, only when story is Finished)
 // DONE: IF RATING IS SET - DISPLAY it as text 

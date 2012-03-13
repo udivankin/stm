@@ -7,15 +7,13 @@ class Application_Model_DbTable_Stories extends Zend_Db_Table_Abstract
 
     // CRUD methods
     
-    public function addStory($title,$desc,$author,$officer,$rating,$status)
+    public function addStory($title,$desc,$author,$officer)
     {
         $data = array(
             'title' => $title,
             'desc' => $desc,
             'author' => $author,
             'officer' => $officer,
-            'rating' => $rating,
-            'status'=>$status
         );
         $this->insert($data);
     }

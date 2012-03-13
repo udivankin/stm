@@ -204,6 +204,4 @@ $(document).ready(function() {
 	setStoryStatus(sID,statusToBeSet,location.reload());
     });
     
-    
-    
 });
