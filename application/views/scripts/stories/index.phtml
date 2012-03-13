@@ -109,7 +109,6 @@
 
             $subtitle = 'Author: '.$story['content']['author'].' | Officer: '.$story['content']['officer'];
             $commentsCount = count($story['comments']);
-            $currentStatusTitle = 'Mark as Started';
 	    $storyID = $story['content']['id'];
 	    
 	    if ($story['content']['rating']>0) {
@@ -130,39 +129,55 @@
 	    $markAsStartedDisabled = '';
 	    $markAsFinishedDisabled = '';
 	    $markAcceptRejectDisabled = '';
+	    $markStoryReadOnly = false;
+	    $markAsAuthor = false;
+	    $markAsOfficer = false;
 	    
 	    if ($story['content']['author'] != $this->userInfo->username) {
-		    $markAcceptRejectDisabled=' disabled';
-	    }	
+		$markAcceptRejectDisabled=' disabled';
+		$markStoryReadOnly = true;
+	    } else {
+		$markAsAuthor = true;
+	    }
 	    if ($story['content']['officer'] != $this->userInfo->username) {
-		    $markAsStartedDisabled=' disabled';
-		    $markAsFinishedDisabled=' disabled';
+		$markAsStartedDisabled=' disabled';
+		$markAsFinishedDisabled=' disabled';
+	    } else {
+		$markAsOfficer = true;
 	    }
 	    
 	    switch ($story['content']['status']) {
 		 case 0: 
-		    echo '<a class="btn setStoryStatus'.$markAsStartedDisabled.'" href="javascript: return false;" statusToBeSet="1" storyID="'.$storyID.'">Mark as started</a>';
+		    if ($markAsOfficer) {
+			echo '<a class="btn setStoryStatus'.$markAsStartedDisabled.'" href="javascript: return false;" statusToBeSet="1" storyID="'.$storyID.'">Mark as started</a>';
+		    } else {
+			if (!$markStoryReadOnly) echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';
+		    }
 		    break;
 		 case 1: 
-		    echo '<a class="btn setStoryStatus'.$markAsFinishedDisabled.'" href="javascript: return false;" statusToBeSet="2" storyID="'.$storyID.'">Mark as Finished</a>';
+		    if ($markAsOfficer) { 
+			echo '<a class="btn setStoryStatus'.$markAsFinishedDisabled.'" href="javascript: return false;" statusToBeSet="2" storyID="'.$storyID.'">Mark as Finished</a>';
+		    } else {
+			if (!$markStoryReadOnly) echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';
+		    }
 		    break;
 		 case 2: 
-		    echo '<a class="btn acceptRejectStory'.$markAcceptRejectDisabled.'" href="javascript: return false;" statusToBeSet="3" storyID="'.$storyID.'">Accept / Reject</a></a>';
+		    if ($markAsAuthor) echo '<a class="btn acceptRejectStory'.$markAcceptRejectDisabled.'" href="javascript: return false;" statusToBeSet="3" storyID="'.$storyID.'">Accept / Reject</a></a>';
 		    break;
 		 case 3: 
 		 case 4:     
-		    echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';
+		    if (!$markStoryReadOnly) echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';
 		    break;	
 	    }
-?>
-                    
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="javascript: return false;" class="editStory" storyID="<?php echo $storyID; ?>"><i class="icon-pencil"></i> Edit Story</a></li>			
-                        <li><a href="javascript: return false;" class="deleteStory" storyID="<?php echo $storyID; ?>"><i class="icon-remove"></i> Delete Story</a></li>
-                    </ul>
+	    
+	    if (!$markStoryReadOnly) { 
+		echo '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a><ul class="dropdown-menu">';
+		echo '<li><a href="javascript: return false;" class="editStory" storyID="'.$storyID.'"><i class="icon-pencil"></i> Edit Story</a></li>';	
+		echo '<li><a href="javascript: return false;" class="deleteStory" storyID="'.$storyID.'"><i class="icon-remove"></i> Delete Story</a></li>';
+		echo '</ul>';
+	    } 
+ ?>
+  
                 </div>
                 <a class="btn commentbutton tooltiped" data-original-title="Toggle comments (<?php echo $commentsCount; ?>)" data-toggle="button"><i class="icon-comment"></i></a>
             </div>
@@ -175,7 +190,12 @@
 <?php
 
             foreach ($story['comments'] as $comment) {
-                echo '<pre id="cmt'.$comment['id'].'">'.$comment['author'].' wrote: '.$comment['text'].'<a class="removeComment" title="Delete Comment" href="#" commentID="'.$comment['id'].'">×</a></pre>';
+		if ($comment['author']==$this->userInfo->username) {
+		    $removeButton = '<a class="removeComment" title="Delete Comment" href="#" commentID="'.$comment['id'].'">×</a>';
+		} else {
+		    $removeButton = '';
+		}
+                echo '<pre id="cmt'.$comment['id'].'">'.$comment['author'].' wrote: '.$comment['text'].$removeButton.'</pre>';
             }
 
 ?>

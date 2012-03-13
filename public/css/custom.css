@@ -96,6 +96,13 @@ a.removeComment:hover{
     border-radius: 4px;
     width: 170px;
 }
+.dropdown-menu li > a.disabled {
+    color: #aaa;
+}
+.dropdown-menu li > a.disabled:hover {
+    background-color: #eee;
+    cursor: default;
+}
 
 /* rating stars css [www.pmob.co.uk/temp/star-rating.htm] */
 ul.starRating{
