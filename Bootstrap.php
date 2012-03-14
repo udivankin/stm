@@ -1,11 +1,11 @@
 <?php
 
-// TODO: EDIT STORIES
 // TODO: STORY ID HIGHLIGHTING (maybe like #tag in twitter)
 // TODO: SQL security - GET only related stories, UPDATE/DELETE only own STORIES, DELETE ONLY OWN COMMENTS
 // TODO: IF REJECTED USER SHOULD BE ABLE TO MAKE STORY "STARTED"
 // TODO: PHPUNIT TESTING
 
+// TODO: EDIT STORIES
 // TODO: ADD STORIES
 // DONE: Set disabled status to delete and edit buttons if user is not owner
 // DONE: STORY RATING (ensure that shown only for Author, only when story is Finished)
