@@ -171,7 +171,8 @@
 		    if ($markAsAuthor) echo '<a class="btn acceptRejectStory'.$markAcceptRejectDisabled.'" href="javascript: return false;" statusToBeSet="3" storyID="'.$storyID.'">Accept / Reject</a></a>';
 		    break;
 		 case 3:
-		    if (!$markStoryReadOnly) echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';                     
+		    if (!$markStoryReadOnly) echo '<a class="btn disabled href="javascript: return false;">story commands</a></a>';
+                    break;
 		 case 4:     
                     if ($markAsOfficer) {
                         echo '<a class="btn setStoryStatus'.$markAsStartedDisabled.'" href="javascript: return false;" statusToBeSet="1" storyID="'.$storyID.'">Mark as started</a>';
