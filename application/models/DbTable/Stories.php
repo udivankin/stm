@@ -74,9 +74,9 @@ class Application_Model_DbTable_Stories extends Zend_Db_Table_Abstract
     }
 
     // get officers list for story list filtering
-    public function getStoriesOfficerList()
+    public function getStoriesOfficerList($username)
     {
-        $result = $this->fetchAll($this->select()->from($this->_name, array('officer'))->group('officer'));
+        $result = $this->fetchAll($this->select()->from($this->_name, array('officer'))->where('author = ?',$username)->orWhere('officer = ?',$username)->group('officer'));
 	return $result;
     }
  
@@ -93,4 +93,3 @@ class Application_Model_DbTable_Stories extends Zend_Db_Table_Abstract
     
     
 }
-

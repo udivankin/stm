@@ -61,11 +61,12 @@
 	    <li class="nav-header">Filter by officer:</li>
                 
 <?php
-    
+        // rendering officer filtering list
         foreach ($this->officers as $officer) {
 	    echo '<li><a class="filterByOfficer" storyofficer="'.$officer['officer'].'" href="javascript: return false;"><i class="icon-user"></i> '.$officer['officer'].'</a></li>';
 	}
         
+        // and status filter list
 ?>
             
 	    <li class="nav-header">Filter by status:</li>
@@ -119,7 +120,7 @@
             echo '<div class="storyBlock"><div class="storyBlockTitle"><h4><strong>['.$statuses[$story['content']['status']].$ratedText.'] #'.$storyID.'</strong> '.$story['content']['title'].'</h4></div>';
             echo '<p>'.$subtitle.'</p><p>Description: '.$story['content']['desc'].'</p>';
 
-            ?>
+?>
 
             <div class="storyBlockRight">
 		
@@ -200,6 +201,7 @@
             
 
 <?php
+            // parsing comments 
 
             foreach ($story['comments'] as $comment) {
 		if ($comment['author']==$this->userInfo->username) {

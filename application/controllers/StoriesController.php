@@ -42,7 +42,7 @@ class StoriesController extends Zend_Controller_Action
             $str[]=array('content'=>$res,'comments'=>$storycomments);
         }
         if ($str) $this->view->stories = $str;
-	$this->view->officers = $this->stories->getStoriesOfficerList();
+	$this->view->officers = $this->stories->getStoriesOfficerList($this->userInfo->username);
     }
 
     public function addCommentAction()
