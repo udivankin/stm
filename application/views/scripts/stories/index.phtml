@@ -209,7 +209,7 @@
 		} else {
 		    $removeButton = '';
 		}
-                echo '<pre id="cmt'.$comment['id'].'">'.$comment['author'].' wrote: '.$comment['text'].$removeButton.'</pre>';
+                echo '<div class="well storyComment" id="cmt'.$comment['id'].'"><span class="highlight">'.$comment['author'].'</span> wrote: '.$comment['text'].$removeButton.'</div>';
             }
 
 ?>

@@ -46,11 +46,14 @@ body {
 .storyComments textarea {
     width:99%;
 }
-.storyComments pre {
+.storyComments .storyComment {
     position: relative;
-    padding-right: 22px;
+    padding: 8px 20px 8px 14px;
 }
-
+.highlight {
+    border-bottom: #3A87AD 1px solid;
+    cursor: pointer;
+}
 .modal {
     display: none;
 }

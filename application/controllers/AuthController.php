@@ -49,44 +49,49 @@ class AuthController extends Zend_Controller_Action
                 $nameEmailValidator = new Zend_Validate_EmailAddress();
                 if ($nameEmailValidator->isValid($username)) {
                     $username = $usersmodel->getUserNameByEmail($username);
+                    
                 }
                 
-		// set fields to proceed auth
-                $authAdapter->setTableName('users')
-                            ->setIdentityColumn('username')
-                            ->setCredentialColumn('password');
-
-		$salt = Zend_Registry::get('hashsalt');
-
-                // set auth type		
-                $authAdapter->setIdentity($username)
-                    ->setCredential(md5($password.$salt));
-
-                // getting new Zend_Auth instance
-                $auth = Zend_Auth::getInstance();
-
-                // trying to authenticate via submitted credentials
-                $result = $auth->authenticate($authAdapter);
-
-                // if we had luck with auth
-                if ($result->isValid()) {
-                    
-                    // passing  user info to $identity
-                    $identity = $authAdapter->getResultRowObject();
-
-                    // user storage to $authStorage
-                    $authStorage = $auth->getStorage();
-
-                    // and storing $identity there
-                    $authStorage->write($identity);
-
-                    // using redirection helper to redirect to homepage
-                    $this->_helper->redirector('index', 'Stories');
-                    
+                if (!$username) {
+                     $this->view->errMessage = 'Wrong login/email or password';
                 } else {
-                    
-                    $this->view->errMessage = 'Wrong login/email or password';
-                    
+                    // set fields to proceed auth
+                    $authAdapter->setTableName('users')
+                                ->setIdentityColumn('username')
+                                ->setCredentialColumn('password');
+
+                    $salt = Zend_Registry::get('hashsalt');
+
+                    // set auth type		
+                    $authAdapter->setIdentity($username)
+                        ->setCredential(md5($password.$salt));
+
+                    // getting new Zend_Auth instance
+                    $auth = Zend_Auth::getInstance();
+
+                    // trying to authenticate via submitted credentials
+                    $result = $auth->authenticate($authAdapter);
+
+                    // if we had luck with auth
+                    if ($result->isValid()) {
+
+                        // passing  user info to $identity
+                        $identity = $authAdapter->getResultRowObject();
+
+                        // user storage to $authStorage
+                        $authStorage = $auth->getStorage();
+
+                        // and storing $identity there
+                        $authStorage->write($identity);
+
+                        // using redirection helper to redirect to homepage
+                        $this->_helper->redirector('index', 'Stories');
+
+                    } else {
+
+                        $this->view->errMessage = 'Wrong login/email or password';
+
+                    }
                 }
             }
 	}

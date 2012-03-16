@@ -27,7 +27,7 @@ class Application_Model_DbTable_Comments extends Zend_Db_Table_Abstract
             'author' => $author,
             'text' => $text
         );
-        $this->insert($data);
+        return $this->insert($data);
     }
     
     // delete

@@ -19,7 +19,8 @@ class StoriesController extends Zend_Controller_Action
 			->addActionContext('updateStoryRating', 'json')
 			->addActionContext('deleteStory', 'json')
 			->addActionContext('addComment', 'json')
-			->addActionContext('deleteComment', 'json')	    
+			->addActionContext('deleteComment', 'json')
+			->addActionContext('getStroryIDsAction', 'json')
 			->initContext();
         }
 	// otherwise redirect to login page
@@ -35,8 +36,8 @@ class StoriesController extends Zend_Controller_Action
         foreach ($result as $res) {
             // highlight
             foreach ($strIDs as $strID) {
-                $res['title'] = preg_replace('/#'.$strID.'\s/', '<a href="#">#'.$strID.'</a> ', $res['title']);
-                $res['desc'] = preg_replace('/#'.$strID.'\s/', '<a href="#">#'.$strID.'</a> ', $res['desc']);
+                $res['title'] = preg_replace('/#'.$strID.'\s/', '<span class="highlight">#'.$strID.'</span> ', $res['title']);
+                $res['desc'] = preg_replace('/#'.$strID.'\s/', '<span class="highlight">#'.$strID.'</span> ', $res['desc']);
             }
             $storycomments = $this->comments->getCommentsByID($res['id']);
             $str[]=array('content'=>$res,'comments'=>$storycomments);
@@ -61,8 +62,9 @@ class StoriesController extends Zend_Controller_Action
 		$commentText = $this->_getParam('commentText');
 	    }
 	    if ($storyID && $commentText) {
-		$this->comments->addComment($storyID, $this->userInfo->username, $commentText);
+		$lastID = $this->comments->addComment($storyID, $this->userInfo->username, $commentText);
 		$res['result']=1;
+                $res['lastID']=$lastID;
 		$res['text']=$this->userInfo->username.' wrote: '.$commentText;
 	    } else {
 		$res['result']=0;
@@ -89,7 +91,8 @@ class StoriesController extends Zend_Controller_Action
 	    $this->_helper->json(array('result'=>$result));
 	} else { 
 	    $this->_helper->redirector('error','Error'); 
-	}
+	
+        }
     }
 
     public function addStoryAction()
@@ -125,7 +128,7 @@ class StoriesController extends Zend_Controller_Action
 	    $this->_helper->json(array('result'=>$result));
 	} else { 
 	    $this->_helper->redirector('error','Error'); 
-	}
+        }
     }
 
     public function updateStoryAction()
@@ -144,20 +147,20 @@ class StoriesController extends Zend_Controller_Action
 		    $this->_helper->redirector('index','Stories'); 
 		} else {
 		    $this->_helper->redirector('error','Error'); 
-		}
-	    }
-	} else {
-	    $id = $this->_getParam('id');
-	    if ($id) {
-		$data = $this->stories->getStory($id);
-		if ($data) { 
-		    $form->populate($data);
-		} else {
-		    $this->_helper->redirector('error','Error'); 
-		}
-	    }
-	    $this->view->form = $form;
-	}
+		} 
+
+            }
+        }
+        $id = $this->_getParam('id');
+        if ($id) {
+            $data = $this->stories->getStory($id);
+            if ($data) { 
+                $form->populate($data);
+            } else {
+                $this->_helper->redirector('error','Error'); 
+            }
+        }
+        $this->view->form = $form;       
 	
     }
 
@@ -182,7 +185,7 @@ class StoriesController extends Zend_Controller_Action
 	    $this->_helper->json(array('result'=>$result));
 	} else { 
 	    $this->_helper->redirector('error','Error'); 
-	}
+        }
     }
 
     public function setStoryRatingAction()
@@ -204,11 +207,24 @@ class StoriesController extends Zend_Controller_Action
 	    $this->_helper->json(array('result'=>$result));
 	} else { 
 	    $this->_helper->redirector('error','Error'); 
-	}
+        }
+    }
+
+    public function getStroryIDsAction()
+    {
+        // action body
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $strIDs = $this->stories->getStoryIDs();
+            $this->_helper->json(array('result'=>$strIDs));
+	} else { 
+	    $this->_helper->redirector('error','Error'); 
+        }            
     }
 
 
 }
+
+
 
 
 
