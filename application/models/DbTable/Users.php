@@ -24,7 +24,8 @@ class Application_Model_DbTable_Users extends Zend_Db_Table_Abstract
     function getUserNameByEmail($email)
     {
         $row = $this->fetchRow("email = '$email'");
-        return $row->username;
+        if ($row) { return $row->username; } 
+        else { return false; }
     }
     
     
